@@ -13,11 +13,19 @@ describe "A new Yieldmanager" do
     lambda { Yieldmanager.new({}) }.should raise_error(ArgumentError)
   end
   
+  it "ensures :base_url always includes a trailing slash" do
+    @ym.base_url.should match(/\/$/)
+  end
+  
+  it "pulls list of services" do
+    @ym.services.should include("contact")
+  end
+  
   def login_args
     @login_args ||= {
       :user => "bill",
       :pass => "secret",
-      :base_url => "https://api.yieldmanager.com/api-1.30/"
+      :base_url => "https://api.yieldmanager.com/api-1.30"
     }
   end
 end
