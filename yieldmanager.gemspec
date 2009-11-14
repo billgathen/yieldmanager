@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{yieldmanager}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bill Gathen"]
@@ -26,7 +26,8 @@ Gem::Specification.new do |s|
      "lib/yieldmanager.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
-     "spec/yieldmanager_spec.rb"
+     "spec/yieldmanager_spec.rb",
+     "yieldmanager.gemspec"
   ]
   s.homepage = %q{http://github.com/billgathen/yieldmanager}
   s.rdoc_options = ["--charset=UTF-8"]
