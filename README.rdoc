@@ -1,6 +1,10 @@
 = yieldmanager
 
-Description goes here.
+This gem offers full access to YieldManager's API tools (read/write) as well as
+ad-hoc reporting through the Reportware tool.
+
+This is very much alpha software, so don't expect it to accomplish much if
+anything for awhile.
 
 == Note on Patches/Pull Requests
  

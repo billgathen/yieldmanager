@@ -5,9 +5,9 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "yieldmanager"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "bill.gathen@adtegrity.com"
+    gem.summary = %Q{Interact with RightMedia's YieldManager API and Reportware products}
+    gem.description = %Q{This gem offers full access to YieldManager's API tools (read/write) as well as ad-hoc reporting through the Reportware tool}
+    gem.email = "bill@billgathen.com"
     gem.homepage = "http://github.com/billgathen/yieldmanager"
     gem.authors = ["Bill Gathen"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
