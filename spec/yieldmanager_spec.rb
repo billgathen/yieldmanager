@@ -2,22 +2,22 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "A new Yieldmanager" do
   before(:each) do
-    @ym = Yieldmanager.new(login_args)
+    @ym = Yieldmanager::Client.new(login_args)
   end
   
   it "requires :user, :pass and :base_url as args" do
     @ym.user.should equal(login_args[:user])
     @ym.pass.should equal(login_args[:pass])
     @ym.base_url.should equal(login_args[:base_url])
-    lambda { Yieldmanager.new() }.should raise_error(ArgumentError)
-    lambda { Yieldmanager.new({}) }.should raise_error(ArgumentError)
+    lambda { Yieldmanager::Client.new() }.should raise_error(ArgumentError)
+    lambda { Yieldmanager::Client.new({}) }.should raise_error(ArgumentError)
   end
   
   it "ensures :base_url always includes a trailing slash" do
     @ym.base_url.should match(/\/$/)
   end
   
-  it "pulls list of services" do
+  it "displays available services" do
     @ym.services.should include("contact")
   end
   
