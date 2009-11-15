@@ -46,3 +46,23 @@ describe "A build run" do
     end
   end
 end
+
+describe "A delete run" do
+  it "removes directory structure" do
+    contact_wsdl = "#{VERSION_DIR}/prod/contact.wsdl"
+    contact_wsdl_test = "#{VERSION_DIR}/test/contact.wsdl"
+    need_rebuild = File.exists?(VERSION_DIR)
+    begin
+      Yieldmanager::Builder.build_wsdls_for(API_VERSION)
+      File.exists?(contact_wsdl).should be_true
+      File.exists?(contact_wsdl_test).should be_true
+      Yieldmanager::Builder.delete_wsdls_for(API_VERSION)
+      File.exists?(contact_wsdl).should be_false
+      File.exists?(contact_wsdl_test).should be_false
+    ensure
+      if need_rebuild
+        Yieldmanager::Builder.build_wsdls_for(API_VERSION)
+      end
+    end
+  end
+end

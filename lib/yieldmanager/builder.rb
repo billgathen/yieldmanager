@@ -27,6 +27,10 @@ module Yieldmanager
       end
     end
     
+    def self.delete_wsdls_for api_version
+      FileUtils.rm_rf "#{WSDL_DIR}/#{api_version}"
+    end
+    
     def self.lookup_services api_version, test = false
       services = []
       base_url = test ? BASE_URL_TEST : BASE_URL

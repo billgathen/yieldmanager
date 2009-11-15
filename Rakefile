@@ -54,4 +54,14 @@ namespace :yieldmanager do
     require 'lib/yieldmanager/builder'
     Yieldmanager::Builder.build_wsdls_for(api_version)
   end
+  
+  desc "Delete wsdls for supplied version"
+  task :delete_wsdls do
+    api_version = ENV['API_VERSION']
+    unless api_version
+      raise ArgumentError, "Please supply API_VERSION"
+    end
+    require 'lib/yieldmanager/builder'
+    Yieldmanager::Builder.delete_wsdls_for(api_version)
+  end
 end
