@@ -5,29 +5,26 @@ require 'open-uri'
 
 module Yieldmanager
   class Client
-    attr_accessor :user, :pass, :base_url, :services
+    attr_accessor :user, :pass, :api_version, :env, :services
+    BASE_URL = "https://api.yieldmanager.com/api-"
+    BASE_URL_TEST = "https://api-test.yieldmanager.com/api-"
+    WSDL_DIR = File.join(File.dirname(__FILE__), '..', '..', 'wsdls')
   
     def initialize(opts = nil)
-      unless opts && opts[:user] && opts[:pass] && opts[:base_url]
-        raise ArgumentError, ":user, :pass and :base_url are required"
+      unless opts && opts[:user] && opts[:pass] && opts[:api_version]
+        raise ArgumentError, ":user, :pass and :api_version are required"
       end
       @user = opts[:user]
       @pass = opts[:pass]
-      @base_url = opts[:base_url]
-      @base_url << '/' unless @base_url.match(/\/$/)
-      @services = lookup_services(@base_url)
+      @api_version = opts[:api_version]
+      @env = opts[:env] ||= "prod"
+      @wsdl_dir = "#{WSDL_DIR}/#{@api_version}/#{@env}"
     end
   
-    def lookup_services base_url
-      services = []
-      open("#{base_url}xsd_gen.php?wsdl") do |f|
-        f.each_line do |line|
-          if line.match(/xmlns:api=".*\/(\w+)Service"/)
-            services << $1.downcase
-          end
-        end
+    def available_services
+      Dir.entries(@wsdl_dir).map do |wsdl|
+        wsdl.sub(/\.wsdl/,'')
       end
-      services
     end
   end
 end
