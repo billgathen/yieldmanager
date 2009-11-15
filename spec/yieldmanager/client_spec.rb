@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "A new Yieldmanager" do
+describe "A new Yieldmanager client" do
   before(:each) do
     @ym = Yieldmanager::Client.new(login_args)
   end
