@@ -5,11 +5,14 @@ describe "A build run" do
   API_VERSION = "1.30"
   VERSION_DIR = "#{WSDL_DIR}/#{API_VERSION}"
   
-  before(:each) do
-    @services = Yieldmanager::Builder.build_wsdls_for(API_VERSION)
+  it "rejects non-standard api version" do
+    ["", "a", "1"].each do |v|
+      lambda { Yieldmanager::Builder.build_wsdls_for(v) }.should raise_error(ArgumentError)
+    end
   end
   
   it "creates dir structure for new api version" do
+    Yieldmanager::Builder.build_wsdls_for(API_VERSION)
     File.directory?("#{VERSION_DIR}").should be_true
     File.directory?("#{VERSION_DIR}/test").should be_true
     File.directory?("#{VERSION_DIR}/prod").should be_true
@@ -28,14 +31,18 @@ describe "A build run" do
   
   it "collects available services" do
     TEST = true
+    Yieldmanager::Builder.build_wsdls_for(API_VERSION)
     Yieldmanager::Builder.lookup_services(API_VERSION).should include("contact")
     Yieldmanager::Builder.lookup_services(API_VERSION, TEST).should include("contact")
   end
   
-  it "stores wsdls" do
-    @services.each do |service|
-      File.exists?("#{VERSION_DIR}/prod/#{service}.wsdl").should be_true
-      File.exists?("#{VERSION_DIR}/test/#{service}.wsdl").should be_true
+  it "stores wsdl files" do
+    Yieldmanager::Builder.build_wsdls_for(API_VERSION)
+    Yieldmanager::Builder.lookup_services(API_VERSION).each do |s|
+      File.exists?("#{VERSION_DIR}/prod/#{s}.wsdl").should be_true
+    end
+    Yieldmanager::Builder.lookup_services(API_VERSION, TEST).each do |s|
+      File.exists?("#{VERSION_DIR}/test/#{s}.wsdl").should be_true
     end
   end
 end

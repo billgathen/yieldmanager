@@ -43,3 +43,15 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+namespace :yieldmanager do
+  desc "Build local wsdl repository for supplied version"
+  task :get_wsdls do
+    api_version = ENV['API_VERSION']
+    unless api_version
+      raise ArgumentError, "Please supply API_VERSION"
+    end
+    require 'lib/yieldmanager/builder'
+    Yieldmanager::Builder.build_wsdls_for(api_version)
+  end
+end
