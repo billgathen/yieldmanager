@@ -1,0 +1,12 @@
+* resolve bug using local wsdls (currently using remote)
+	"unknown element: {http://schemas.xmlsoap.org/wsdl/}definitions"
+* add session start/end
+* add session block
+* add pagination
+* add error-handling (timeouts, too many connections?)
+* add usage docs to README
+* add reporting
+** report(xml) method in Client
+** Yieldmanager::Report DTO
+*** headers array (for proper column ordering)
+*** data as array of hashes

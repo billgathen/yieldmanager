@@ -36,7 +36,9 @@ module Yieldmanager
     end
     
     def load_service name
-      wsdl_path = "file://#{@wsdl_dir}/#{name}.wsdl"
+      # FIXME Local wsdl hit throws "unknown element: {http://schemas.xmlsoap.org/wsdl/}definitions"
+      # wsdl_path = "file://#{@wsdl_dir}/#{name}.wsdl"
+      wsdl_path = "#{BASE_URL}#{api_version}/#{name}.php?wsdl"
       SOAP::WSDLDriverFactory.new(wsdl_path).create_rpc_driver
     end
   

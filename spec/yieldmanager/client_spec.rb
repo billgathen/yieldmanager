@@ -1,5 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+NEED_ENV_ARGS_MSG = <<EOM
+Please set these environment variables to match your Yieldmanager account:
+* YIELDMANAGER_USER
+* YIELDMANAGER_PASS
+* YIELDMANAGER_API_VERSION
+EOM
+
 describe "A new Yieldmanager client" do
   before(:each) do
     @ym = Yieldmanager::Client.new(login_args)
@@ -26,14 +33,28 @@ describe "A new Yieldmanager client" do
   end
   
   it "exposes helper methods for available services" do
-    @ym.contact.should == "contact"
+    @ym.contact.should be_instance_of(SOAP::RPC::Driver)
+  end
+  
+  it "generated contact service supports login/logout of session" do
+    token = @ym.contact.login(@login_args[:user],@login_args[:pass],{'errors_level' => 'throw_errors','multiple_sessions' => '1'})
+    begin
+      token.should_not be_nil
+    ensure
+      @ym.contact.logout(token)
+    end
   end
   
   def login_args
+    unless ENV["YIELDMANAGER_USER"] &&
+      ENV["YIELDMANAGER_PASS"] &&
+      ENV["YIELDMANAGER_API_VERSION"]
+      raise(ArgumentError, NEED_ENV_ARGS_MSG)
+    end
     @login_args ||= {
-      :user => "bill",
-      :pass => "secret",
-      :api_version => "1.30"
+      :user => ENV["YIELDMANAGER_USER"],
+      :pass => ENV["YIELDMANAGER_PASS"],
+      :api_version => ENV["YIELDMANAGER_API_VERSION"]
     }
   end
 end
