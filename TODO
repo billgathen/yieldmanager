@@ -1,5 +1,7 @@
 * resolve bug using local wsdls (currently using remote)
 	"unknown element: {http://schemas.xmlsoap.org/wsdl/}definitions"
+* throwing warning when running in autotest, but not spec?: monkeypatch net/http?
+	"warning: peer certificate won't be verified in this SSL session"
 * add session start/end
 * add session block
 * add pagination
