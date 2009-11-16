@@ -41,6 +41,7 @@ module Yieldmanager
           end
         end
       end
+      services << "xsd_gen"
       services
     end
     
@@ -48,8 +49,9 @@ module Yieldmanager
       wsdl_path = "#{WSDL_DIR}/#{api_version}/#{test ? 'test' : 'prod'}"
       services.each do |s|
         service_url = "#{base_url}#{api_version}/#{s}.php?wsdl"
+        dest_path = "#{wsdl_path}/#{s}#{s == 'xsd_gen' ? '.php' : '.wsdl'}"
         open(service_url) do |f|
-          File.open("#{wsdl_path}/#{s}.wsdl","w") do |wsdl_file|
+          File.open(dest_path,"w") do |wsdl_file|
             f.each_line { |l| wsdl_file.write(l) }
           end
         end

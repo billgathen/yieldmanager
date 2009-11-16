@@ -19,12 +19,35 @@ module Yieldmanager
       @api_version = opts[:api_version]
       @env = opts[:env] ||= "prod"
       @wsdl_dir = "#{WSDL_DIR}/#{@api_version}/#{@env}"
+      wrap_services
+    end
+    
+    def wrap_services
+      available_services.each do |s|
+        self.instance_variable_set("@#{s}", nil)
+        # create wrapper method to load it when requested
+        self.class.send(:define_method, s) {
+          unless self.instance_variable_get("@#{s}")
+            self.instance_variable_set("@#{s}",load_service(s))
+          end
+          self.instance_variable_get("@#{s}")
+        }
+      end
+    end
+    
+    def load_service name
+      wsdl_path = "file://#{@wsdl_dir}/#{name}.wsdl"
+      SOAP::WSDLDriverFactory.new(wsdl_path).create_rpc_driver
     end
   
     def available_services
       Dir.entries(@wsdl_dir).map do |wsdl|
-        wsdl.sub(/\.wsdl/,'')
-      end
+        if wsdl.match(/wsdl/) 
+          wsdl.sub(/\.wsdl/,'')
+        else
+          nil
+        end
+      end.compact
     end
   end
 end

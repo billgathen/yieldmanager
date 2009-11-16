@@ -25,6 +25,10 @@ describe "A new Yieldmanager client" do
     ym_test.available_services.should include("contact")
   end
   
+  it "exposes helper methods for available services" do
+    @ym.contact.should == "contact"
+  end
+  
   def login_args
     @login_args ||= {
       :user => "bill",

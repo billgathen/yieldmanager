@@ -12,6 +12,7 @@ describe "A build run" do
   end
   
   it "creates dir structure for new api version" do
+    Yieldmanager::Builder.should_receive(:store_wsdls).exactly(2).times
     Yieldmanager::Builder.build_wsdls_for(API_VERSION)
     File.directory?("#{VERSION_DIR}").should be_true
     File.directory?("#{VERSION_DIR}/test").should be_true
@@ -19,6 +20,7 @@ describe "A build run" do
   end
   
   it "clears out old wsdls" do
+    Yieldmanager::Builder.should_receive(:store_wsdls).exactly(4).times
     ["test","prod"].each do |env|
       dir = "#{WSDL_DIR}/#{API_VERSION}/#{env}"
       bad_wsdl = "#{dir}/bad.wsdl"
@@ -39,10 +41,14 @@ describe "A build run" do
   it "stores wsdl files" do
     Yieldmanager::Builder.build_wsdls_for(API_VERSION)
     Yieldmanager::Builder.lookup_services(API_VERSION).each do |s|
-      File.exists?("#{VERSION_DIR}/prod/#{s}.wsdl").should be_true
+      unless s == "xsd_gen"
+        File.exists?("#{VERSION_DIR}/prod/#{s}.wsdl").should be_true
+      end
     end
     Yieldmanager::Builder.lookup_services(API_VERSION, TEST).each do |s|
-      File.exists?("#{VERSION_DIR}/test/#{s}.wsdl").should be_true
+      unless s == "xsd_gen"
+        File.exists?("#{VERSION_DIR}/test/#{s}.wsdl").should be_true
+      end
     end
   end
 end
