@@ -3,6 +3,12 @@ require 'ftools'
 require 'fileutils'
 
 module Yieldmanager
+  # Builds local copies of the Yieldmanager wsdls.
+  # These are used to dynamically-generate the service methods
+  # and instance variables in Yieldmanager::Client.
+  #
+  # At some point, the wsdls themselves will actually be used
+  # to build the objects.
   class Builder
     TEST = true
     BASE_URL = "https://api.yieldmanager.com/api-"
@@ -17,6 +23,12 @@ module Yieldmanager
       store_wsdls(BASE_URL_TEST, api_version, lookup_services(api_version), TEST)
     end
     
+    def self.delete_wsdls_for api_version
+      FileUtils.rm_rf "#{WSDL_DIR}/#{api_version}"
+    end
+
+private
+    
     def self.build_dirs_for api_version
       ["test","prod"].each do |env|
         dir = "#{WSDL_DIR}/#{api_version}/#{env}"
@@ -25,10 +37,6 @@ module Yieldmanager
         end
         File.makedirs(dir)
       end
-    end
-    
-    def self.delete_wsdls_for api_version
-      FileUtils.rm_rf "#{WSDL_DIR}/#{api_version}"
     end
     
     def self.lookup_services api_version, test = false

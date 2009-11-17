@@ -33,7 +33,7 @@ module Yieldmanager
   
     # Creates interface object.
     #
-    # @param options [Hash<Symbol, Object>] An options hash;
+    # Options:
     # * :user (required) - Yieldmanager user
     # * :pass (required) - Yieldmanager pass
     # * :api_version (required) - Yieldmanager API version (i.e., "1.30")
@@ -50,7 +50,6 @@ module Yieldmanager
       wrap_services
     end
   
-    # @returns service_names [Array]
     def available_services
       Dir.entries(@wsdl_dir).map do |wsdl|
         if wsdl.match(/wsdl/) 
@@ -62,19 +61,16 @@ module Yieldmanager
     end
     
     # Opens Yieldmanager session
-    # @returns token
     def start_session
       contact.login(@user,@pass,{'errors_level' => 'throw_errors','multiple_sessions' => '1'})
     end
     
     # Closes Yieldmanager session
-    # @param token
     def end_session token
       contact.logout(token)
     end
     
     # Manages Yieldmanager session
-    # @returns token
     def session
       token = start_session
       begin

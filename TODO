@@ -5,9 +5,9 @@
 * DONE add session start/end
 * DONE add session block
 * DONE end session even after exception
+* DONE add usage docs to README
 * add pagination
 * add error-handling (timeouts, too many connections?)
-* add usage docs to README
 * add reporting
 ** report(xml) method in Client
 ** Yieldmanager::Report DTO
