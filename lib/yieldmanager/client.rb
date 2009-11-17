@@ -51,5 +51,13 @@ module Yieldmanager
         end
       end.compact
     end
+    
+    def start_session
+      contact.login(@user,@pass,{'errors_level' => 'throw_errors','multiple_sessions' => '1'})
+    end
+    
+    def end_session token
+      contact.logout(token)
+    end
   end
 end

@@ -36,13 +36,20 @@ describe "A new Yieldmanager client" do
     @ym.contact.should be_instance_of(SOAP::RPC::Driver)
   end
   
-  it "generated contact service supports login/logout of session" do
+  it "generates contact service supporting login/logout of session" do
     token = @ym.contact.login(@login_args[:user],@login_args[:pass],{'errors_level' => 'throw_errors','multiple_sessions' => '1'})
     begin
       token.should_not be_nil
     ensure
       @ym.contact.logout(token)
     end
+  end
+  
+  it "exposes start/end session" do
+    token = @ym.start_session
+    currencies = @ym.dictionary.getCurrencies(token)
+    @ym.end_session token
+    lambda { @ym.dictionary.getCurrencies(token) }.should raise_error(SOAP::FaultError)
   end
   
   def login_args
