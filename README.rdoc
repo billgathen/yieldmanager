@@ -9,21 +9,21 @@ copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 
 == Creating a Yieldmanager::Client
 
-@ym = Yieldmanager::Client(
-	:user => "bob",
-	:pass => "secret",
-	:api_version => "1.30"
-)
+	@ym = Yieldmanager::Client(
+		:user => "bob",
+		:pass => "secret",
+		:api_version => "1.30"
+	)
 
 == Finding available services
 
-@ym.available_services
+	@ym.available_services
 
 == Using a service
 
-@ym.session do |token|
-	currencies = @ym.dictionary.getCurrencies(token)
-end
+	@ym.session do |token|
+		currencies = @ym.dictionary.getCurrencies(token)
+	end
 
 == session vs. start_session/end_session
 
@@ -41,7 +41,7 @@ wrap your logic in a begin/ensure clause and call end_session from the ensure.
   future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but
-   bump version in a commit by itself I can ignore when I pull)
+  bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
 == Copyright
