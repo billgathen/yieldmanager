@@ -2,8 +2,9 @@
 	"unknown element: {http://schemas.xmlsoap.org/wsdl/}definitions"
 * throwing warning when running in autotest, but not spec?: monkeypatch net/http?
 	"warning: peer certificate won't be verified in this SSL session"
-* add session start/end
-* add session block
+* DONE add session start/end
+* DONE add session block
+* DONE end session even after exception
 * add pagination
 * add error-handling (timeouts, too many connections?)
 * add usage docs to README

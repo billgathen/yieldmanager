@@ -52,6 +52,26 @@ describe "A new Yieldmanager client" do
     lambda { @ym.dictionary.getCurrencies(token) }.should raise_error(SOAP::FaultError)
   end
   
+  it "exposes session block" do
+    my_token = nil
+    @ym.session do |token|
+      my_token = token
+      currencies = @ym.dictionary.getCurrencies(token)
+    end
+    lambda { @ym.dictionary.getCurrencies(my_token) }.should raise_error(SOAP::FaultError)
+  end
+  
+  it "closes a session even after an exception" do
+    my_token = nil
+    lambda do
+      @ym.session do |token|
+        my_token = token
+        raise Exception, "Ouch!"
+      end
+    end.should raise_error(Exception)
+    lambda { @ym.dictionary.getCurrencies(my_token) }.should raise_error(SOAP::FaultError)
+  end
+  
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
       ENV["YIELDMANAGER_PASS"] &&

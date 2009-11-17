@@ -59,5 +59,14 @@ module Yieldmanager
     def end_session token
       contact.logout(token)
     end
+    
+    def session
+      token = start_session
+      begin
+        yield token
+      ensure
+        end_session token
+      end
+    end
   end
 end
