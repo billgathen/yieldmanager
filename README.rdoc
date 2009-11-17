@@ -1,10 +1,37 @@
 = yieldmanager
 
-This gem offers full access to YieldManager's API tools (read/write) as well as
-ad-hoc reporting through the Reportware tool.
+This gem offers full access to YieldManager's API tools (read/write) and
+(eventually) ad-hoc reporting through the Reportware tool.
 
-This is very much alpha software, so don't expect it to accomplish much if
-anything for awhile.
+Currently it generates a fresh wsdl from the api.yieldmanager.com site the
+first time you use a service (in the future it will use locally-cached
+copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
+
+== Creating a Yieldmanager::Client
+
+@ym = Yieldmanager::Client(
+	:user => "bob",
+	:pass => "secret",
+	:api_version => "1.30"
+)
+
+== Finding available services
+
+@ym.available_services
+
+== Using a service
+
+@ym.session do |token|
+	currencies = @ym.dictionary.getCurrencies(token)
+end
+
+== session vs. start_session/end_session
+
+The +session+ method opens a session, gives you a token to use in your service
+calls, then closes the session when the block ends, even if an exception is
+raised during processing. It's the recommended method to ensure you don't
+hang connections when things go wrong. If you use start/end, make sure you
+wrap your logic in a begin/ensure clause and call end_session from the ensure.
 
 == Note on Patches/Pull Requests
  

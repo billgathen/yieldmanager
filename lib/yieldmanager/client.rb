@@ -4,23 +4,87 @@ require 'soap/wsdlDriver'
 require 'open-uri'
 
 module Yieldmanager
+  # This is the frontend for using Yieldmanager programmatically.
+  # It can be directly used by the user by creating a
+  # new instance and calling +service_name+ to access YM services.
+  # For example:
+  #
+  # ym = Yieldmanager::Client(
+  #   :user => "bob",
+  #   :pass => "secret",
+  #   :api_version => "1.30"
+  # )
+  #
+  # ym.session do |token|
+  #   currencies = @ym.dictionary.getCurrencies(token)
+  # end
   class Client
-    attr_accessor :user, :pass, :api_version, :env, :services
+    # Yieldmanager user
+    attr_reader :user
+    # Yieldmanager password
+    attr_reader :pass
+    # Yieldmanager api version (i.e., "1.30")
+    attr_reader :api_version
+    # Yieldmanager environment ("prod" or "test", defaults to "prod")
+    attr_reader :env
     BASE_URL = "https://api.yieldmanager.com/api-"
     BASE_URL_TEST = "https://api-test.yieldmanager.com/api-"
     WSDL_DIR = File.join(File.dirname(__FILE__), '..', '..', 'wsdls')
   
-    def initialize(opts = nil)
-      unless opts && opts[:user] && opts[:pass] && opts[:api_version]
+    # Creates interface object.
+    #
+    # @param options [Hash<Symbol, Object>] An options hash;
+    # * :user (required) - Yieldmanager user
+    # * :pass (required) - Yieldmanager pass
+    # * :api_version (required) - Yieldmanager API version (i.e., "1.30")
+    # * :env (optional) - Yieldmanager environment "prod" or "test" (defaults to prod)
+    def initialize(options = nil)
+      unless options && options[:user] && options[:pass] && options[:api_version]
         raise ArgumentError, ":user, :pass and :api_version are required"
       end
-      @user = opts[:user]
-      @pass = opts[:pass]
-      @api_version = opts[:api_version]
-      @env = opts[:env] ||= "prod"
+      @user = options[:user]
+      @pass = options[:pass]
+      @api_version = options[:api_version]
+      @env = options[:env] ||= "prod"
       @wsdl_dir = "#{WSDL_DIR}/#{@api_version}/#{@env}"
       wrap_services
     end
+  
+    # @returns service_names [Array]
+    def available_services
+      Dir.entries(@wsdl_dir).map do |wsdl|
+        if wsdl.match(/wsdl/) 
+          wsdl.sub(/\.wsdl/,'')
+        else
+          nil
+        end
+      end.compact
+    end
+    
+    # Opens Yieldmanager session
+    # @returns token
+    def start_session
+      contact.login(@user,@pass,{'errors_level' => 'throw_errors','multiple_sessions' => '1'})
+    end
+    
+    # Closes Yieldmanager session
+    # @param token
+    def end_session token
+      contact.logout(token)
+    end
+    
+    # Manages Yieldmanager session
+    # @returns token
+    def session
+      token = start_session
+      begin
+        yield token
+      ensure
+        end_session token
+      end
+    end
+
+private
     
     def wrap_services
       available_services.each do |s|
@@ -41,32 +105,6 @@ module Yieldmanager
       wsdl_path = "#{BASE_URL}#{api_version}/#{name}.php?wsdl"
       SOAP::WSDLDriverFactory.new(wsdl_path).create_rpc_driver
     end
-  
-    def available_services
-      Dir.entries(@wsdl_dir).map do |wsdl|
-        if wsdl.match(/wsdl/) 
-          wsdl.sub(/\.wsdl/,'')
-        else
-          nil
-        end
-      end.compact
-    end
-    
-    def start_session
-      contact.login(@user,@pass,{'errors_level' => 'throw_errors','multiple_sessions' => '1'})
-    end
-    
-    def end_session token
-      contact.logout(token)
-    end
-    
-    def session
-      token = start_session
-      begin
-        yield token
-      ensure
-        end_session token
-      end
-    end
   end
+
 end
