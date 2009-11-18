@@ -37,9 +37,7 @@ the partial dataset on-the-fly or accumulating it for later use.
 		@ym.paginate(BLOCK_SIZE) do |block|
 			(lines,tot) = line_item_service.getByBuyer(token,id,BLOCK_SIZE,block)
 			# ...do something with lines...
-			
-      # remember to return total!
-      tot
+			tot # remember to return total!
 		end
 	end
 
