@@ -72,6 +72,31 @@ describe "A new Yieldmanager client" do
     lambda { @ym.dictionary.getCurrencies(my_token) }.should raise_error(SOAP::FaultError)
   end
   
+  it "paginates" do
+    BLOCK_SIZE = 50
+    id = -1
+    @ym.session do |token|
+      line_item_service = @ym.line_item
+      [
+        {:calls_expected => 2, :dataset_size => 75},
+        {:calls_expected => 1, :dataset_size => 25},
+        {:calls_expected => 1, :dataset_size => 0}
+      ].each do |args|
+        line_item_service.
+          should_receive(:getByBuyer).
+          exactly(args[:calls_expected]).times.
+          and_return([[],args[:dataset_size]])
+        @ym.paginate(BLOCK_SIZE) do |block|
+          (lines,tot) = line_item_service.
+            getByBuyer(token,id,BLOCK_SIZE,block)
+          # must return total rows in dataset
+          # so paginate knows when to stop!
+          tot
+        end
+      end
+    end
+  end
+  
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
       ENV["YIELDMANAGER_PASS"] &&

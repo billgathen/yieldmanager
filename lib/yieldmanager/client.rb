@@ -79,6 +79,19 @@ module Yieldmanager
         end_session token
       end
     end
+    
+    # Allows looping over datasets too large to pull back in one call
+    #
+    # Block must return total rows in dataset to know when to stop!
+    def paginate block_size
+      page = 1
+      total = block_size + 1
+
+      begin
+        total = yield page # Need total back from block to know when to stop!
+        page += 1
+      end until (block_size * (page-1)) > total
+    end
 
 private
     

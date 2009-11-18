@@ -7,7 +7,7 @@ Currently it generates a fresh wsdl from the api.yieldmanager.com site the
 first time you use a service (in the future it will use locally-cached
 copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 
-== Creating a Yieldmanager::Client
+=== Creating a Yieldmanager::Client
 
 	@ym = Yieldmanager::Client(
 		:user => "bob",
@@ -15,17 +15,35 @@ copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 		:api_version => "1.30"
 	)
 
-== Finding available services
+=== Finding available services
 
 	@ym.available_services
 
-== Using a service
+=== Using a service
 
 	@ym.session do |token|
 		currencies = @ym.dictionary.getCurrencies(token)
 	end
+	
+=== Pagination
 
-== session vs. start_session/end_session
+Some calls return datasets too large to retrieve all at once.
+Pagination allows you to pull them back incrementally, handling
+the partial dataset on-the-fly or accumulating it for later use.
+
+	BLOCK_SIZE = 50
+	id = 1
+	@ym.session do |token|
+		@ym.paginate(BLOCK_SIZE) do |block|
+			(lines,tot) = line_item_service.getByBuyer(token,id,BLOCK_SIZE,block)
+			# ...do something with lines...
+			
+      # remember to return total!
+      tot
+		end
+	end
+
+=== session vs. start_session/end_session
 
 The +session+ method opens a session, gives you a token to use in your service
 calls, then closes the session when the block ends, even if an exception is
