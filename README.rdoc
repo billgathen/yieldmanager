@@ -9,7 +9,7 @@ copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 
 === Creating a Yieldmanager::Client
 
-	@ym = Yieldmanager::Client(
+	@ym = Yieldmanager::Client.new(
 		:user => "bob",
 		:pass => "secret",
 		:api_version => "1.30"

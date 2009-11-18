@@ -6,7 +6,7 @@
 * DONE add session block
 * DONE end session even after exception
 * DONE add usage docs to README
-* add pagination
+* DONE add pagination
 * add error-handling (timeouts, too many connections?)
 * add reporting
 ** report(xml) method in Client
