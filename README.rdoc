@@ -7,6 +7,20 @@ Currently it generates a fresh wsdl from the api.yieldmanager.com site the
 first time you use a service (in the future it will use locally-cached
 copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 
+=== Installation
+
+Yieldmanager is available as a gem on gemcutter.org.
+
+	sudo gem install yieldmanager
+
+The project is available for review/forking on github.com
+
+	git clone git://github.com/billgathen/yieldmanager.git
+
+To use in a Rails project, add this to config/environment.rb:
+
+	config.gem 'yieldmanager'
+
 === Creating a Yieldmanager::Client
 
 	@ym = Yieldmanager::Client.new(
