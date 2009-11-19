@@ -49,7 +49,7 @@ the partial dataset on-the-fly or accumulating it for later use.
 	id = 1
 	@ym.session do |token|
 		@ym.paginate(BLOCK_SIZE) do |block|
-			(lines,tot) = line_item_service.getByBuyer(token,id,BLOCK_SIZE,block)
+			(lines,tot) = @ym.line_item.getByBuyer(token,id,BLOCK_SIZE,block)
 			# ...do something with lines...
 			tot # remember to return total!
 		end
