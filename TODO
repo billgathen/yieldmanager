@@ -13,3 +13,5 @@
 ** Yieldmanager::Report DTO
 *** headers array (for proper column ordering)
 *** data as array of hashes
+** fakeweb for testing (http://fakeweb.rubyforge.org/)
+** hpricot for parsing (http://github.com/hpricot/hpricot/)

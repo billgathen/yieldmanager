@@ -97,6 +97,17 @@ describe "A new Yieldmanager client" do
     end
   end
   
+  describe "A Yieldmanager report" do
+
+    before(:each) do
+      @ym = Yieldmanager::Client.new(login_args)
+    end
+    
+    it "returns data" do
+      request_xml.should include("advertiser_id")
+    end
+  end
+  
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
       ENV["YIELDMANAGER_PASS"] &&
@@ -108,5 +119,27 @@ describe "A new Yieldmanager client" do
       :pass => ENV["YIELDMANAGER_PASS"],
       :api_version => ENV["YIELDMANAGER_API_VERSION"]
     }
+  end
+
+  def request_xml
+    <<EOR
+<?xml version="1.0"?>
+<RWRequest clientName="ui.ent.prod">
+  <REQUEST domain="network" service="ComplexReport" nocache="n" contact_id="52798" remote_ip_address="99.62.255.163" entity="3" filter_entity_id="3" timezone="EST">
+    <ROWS>
+      <ROW type="group" priority="1" ref="entity_id" includeascolumn="n"/>
+      <ROW type="group" priority="2" ref="advertiser_id" includeascolumn="n"/>
+      <ROW type="total"/>
+    </ROWS>
+    <COLUMNS>
+      <COLUMN ref="advertiser_name"/>
+      <COLUMN ref="seller_imps"/>
+    </COLUMNS>
+    <FILTERS>
+      <FILTER ref="time" macro="yesterday"/>
+    </FILTERS>
+  </REQUEST>
+</RWRequest>
+EOR
   end
 end

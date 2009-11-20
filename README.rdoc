@@ -36,7 +36,7 @@ To use in a Rails project, add this to config/environment.rb:
 === Using a service
 
 	@ym.session do |token|
-		currencies = @ym.dictionary.getCurrencies(token)
+		@currencies = @ym.dictionary.getCurrencies(token)
 	end
 	
 === Pagination

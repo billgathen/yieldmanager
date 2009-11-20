@@ -10,3 +10,4 @@ end
 
 require 'yieldmanager/client'
 require 'yieldmanager/builder'
+require 'yieldmanager/report'

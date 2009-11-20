@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby -w
-
 require 'soap/wsdlDriver'
 require 'open-uri'
 
@@ -92,6 +90,12 @@ module Yieldmanager
         page += 1
       end until (block_size * (page-1)) > total
     end
+    
+    def pull_report xml
+      rpt = Yieldmanager::Report.new
+      
+      rpt
+    end
 
 private
     
@@ -114,6 +118,19 @@ private
       wsdl_path = "#{BASE_URL}#{api_version}/#{name}.php?wsdl"
       SOAP::WSDLDriverFactory.new(wsdl_path).create_rpc_driver
     end
+    
+    def request_report_token token, xml
+      report.requestViaXML(token,xml)
+    end
+    
+    def retrieve_report_url token, report_token
+      report_url = nil
+      60.times do |secs| # Poll until report ready
+        report_url = report.status(token,report_token)
+        break if report_url != nil
+        sleep(5)
+      end
+      report_url
+    end
   end
-
 end
