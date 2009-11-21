@@ -92,10 +92,10 @@ module Yieldmanager
       end until (block_size * (page-1)) > total
     end
     
-    def pull_report xml
-      rpt = Yieldmanager::Report.new
-      
-      rpt
+    def pull_report token, xml
+      report = Yieldmanager::Report.new
+      report.pull(token, self.report, xml)
+      report
     end
 
 private
@@ -118,29 +118,6 @@ private
       # wsdl_path = "file://#{@wsdl_dir}/#{name}.wsdl"
       wsdl_path = "#{BASE_URL}#{api_version}/#{name}.php?wsdl"
       SOAP::WSDLDriverFactory.new(wsdl_path).create_rpc_driver
-    end
-    
-    def request_report_token token, xml
-      report.requestViaXML(token,xml)
-    end
-    
-    def retrieve_report_url token, report_token
-      report_url = nil
-      60.times do |secs| # Poll until report ready
-        report_url = report.status(token,report_token)
-        break if report_url != nil
-        sleep(5)
-      end
-      report_url
-    end
-    
-    def retrieve_data url
-      rpt = Yieldmanager::Report.new
-      doc = open(url) { |f| Hpricot(f) }
-      (doc/"header column").each do |col|
-        rpt.headers << col.inner_html
-      end
-      rpt
     end
   end
 end

@@ -16,38 +16,46 @@ describe "A Yieldmanager report request" do
   end
   
   it "returns report object" do
-    rpt = @ym.pull_report(request_xml)
-    rpt.should be_instance_of(Yieldmanager::Report)
+    @ym.session do |token|
+      rpt = @ym.pull_report(token, request_xml)
+      rpt.should be_instance_of(Yieldmanager::Report)
+    end
   end
   
   it "makes request and returns report token" do
     @ym.session do |token|
-      @ym.send(:request_report_token, token,request_xml).should_not be_nil
+      rpt = Yieldmanager::Report.new
+      rpt.send(:request_report_token, token, @ym.report, request_xml).should_not be_nil
     end
   end
   
   it "uses report token to pull report url" do
     @ym.session do |token|
-      report_token = @ym.send(:request_report_token, token, request_xml)
-      report_url = @ym.send(:retrieve_report_url, token, report_token)
+      rpt = Yieldmanager::Report.new
+      report_token = rpt.send(:request_report_token, token, @ym.report, request_xml)
+      report_url = rpt.send(:retrieve_report_url, token, @ym.report, report_token)
       report_url.should_not be_nil
     end
   end
   
   it "uses report url to pull report" do
     @ym.session do |token|
-      report_token = @ym.send(:request_report_token, token, request_xml)
-      report_url = @ym.send(:retrieve_report_url, token, report_token)
+      rpt = Yieldmanager::Report.new
+      report_token = rpt.send(:request_report_token, token, @ym.report, request_xml)
+      report_url = rpt.send(:retrieve_report_url, token, @ym.report, report_token)
 
-      report = @ym.send(:retrieve_data, report_url)
-      report.should be_instance_of(Yieldmanager::Report)
-      report.headers[0].should == "advertiser_name"
+      rpt.send(:retrieve_data, report_url)
+      rpt.headers[0].should == "advertiser_name"
     end
   end
   
-  it "offers data as name/value pairs"
-  
-  it "offers data as ordered array"
+  it "offers data as name/value pairs" do
+    @ym.session do |token|
+      report = @ym.pull_report(token, request_xml)
+      report.data[0]['advertiser_name'].should_not be_nil
+      # report.data[0][0].should == report.data[0]['advertiser_name']
+    end
+  end
   
   it "complains if report token is nil"
   
