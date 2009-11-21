@@ -7,6 +7,9 @@ module Yieldmanager
   # These are used to dynamically-generate the service methods
   # and instance variables in Yieldmanager::Client.
   #
+  # This shouldn't need to be run by the end-user because the
+  # current version of the APIs are pre-generated in the gem.
+  #
   # At some point, the wsdls themselves will actually be used
   # to build the objects.
   class Builder

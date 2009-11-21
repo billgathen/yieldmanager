@@ -8,15 +8,18 @@ module Yieldmanager
   # new instance and calling +service_name+ to access YM services.
   # For example:
   #
-  # ym = Yieldmanager::Client(
-  #   :user => "bob",
-  #   :pass => "secret",
-  #   :api_version => "1.30"
-  # )
+  #   ym = Yieldmanager::Client(
+  #     :user => "bob",
+  #     :pass => "secret",
+  #     :api_version => "1.30"
+  #   )
   #
-  # ym.session do |token|
-  #   currencies = @ym.dictionary.getCurrencies(token)
-  # end
+  #   ym.session do |token|
+  #     currencies = @ym.dictionary.getCurrencies(token)
+  #   end
+  #
+  # It also offers simple access to the ReportWare reporting engine
+  # via the #pull_report method.
   class Client
     # Yieldmanager user
     attr_reader :user
@@ -59,17 +62,11 @@ module Yieldmanager
       end.compact
     end
     
-    # Opens Yieldmanager session
-    def start_session
-      contact.login(@user,@pass,{'errors_level' => 'throw_errors','multiple_sessions' => '1'})
-    end
-    
-    # Closes Yieldmanager session
-    def end_session token
-      contact.logout(token)
-    end
-    
     # Manages Yieldmanager session
+    #
+    # Returns block with token string to be used in API/report calls
+    #
+    # Guarantees no hanging sessions except during system crashes
     def session
       token = start_session
       begin
@@ -77,6 +74,20 @@ module Yieldmanager
       ensure
         end_session token
       end
+    end
+    
+    # Opens Yieldmanager session
+    #
+    # Use #session if possible: it guarantees no hanging sessions
+    def start_session
+      contact.login(@user,@pass,{'errors_level' => 'throw_errors','multiple_sessions' => '1'})
+    end
+    
+    # Closes Yieldmanager session
+    #
+    # Use #session if possible: it guarantees no hanging sessions
+    def end_session token
+      contact.logout(token)
     end
     
     # Allows looping over datasets too large to pull back in one call
@@ -92,6 +103,9 @@ module Yieldmanager
       end until (block_size * (page-1)) > total
     end
     
+    # Pulls report from RightMedia, returned as Yieldmanager::Report
+    #
+    # Must be called within the context of a session
     def pull_report token, xml
       report = Yieldmanager::Report.new
       report.pull(token, self.report, xml)

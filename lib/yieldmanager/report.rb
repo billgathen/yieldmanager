@@ -1,4 +1,12 @@
 module Yieldmanager
+  # This is the data object for all reportware requests.
+  #
+  # The #pull method is typically called by Yieldmanager::Client#pull_report.
+  #
+  # Data is returned as an array of keyword hashes, where the
+  # column headers are the keys and the data are the values.
+  # 
+  # Column order is stored in the *headers* array.
   class Report
     attr_accessor :headers, :data
     
