@@ -1,5 +1,6 @@
 require 'soap/wsdlDriver'
 require 'open-uri'
+require 'hpricot'
 
 module Yieldmanager
   # This is the frontend for using Yieldmanager programmatically.
@@ -101,7 +102,7 @@ private
     
     def wrap_services
       available_services.each do |s|
-        self.instance_variable_set("@#{s}", nil)
+        self.class.send(:attr_writer, s.to_sym)
         # create wrapper method to load it when requested
         self.class.send(:define_method, s) {
           unless self.instance_variable_get("@#{s}")
@@ -131,6 +132,15 @@ private
         sleep(5)
       end
       report_url
+    end
+    
+    def retrieve_data url
+      rpt = Yieldmanager::Report.new
+      doc = open(url) { |f| Hpricot(f) }
+      (doc/"header column").each do |col|
+        rpt.headers << col.inner_html
+      end
+      rpt
     end
   end
 end

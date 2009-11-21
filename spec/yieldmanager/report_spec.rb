@@ -34,10 +34,25 @@ describe "A Yieldmanager report request" do
     end
   end
   
-  it "throws ReportTimeoutException if report data never returns" do
-    # need configurable pause and attempts to keep this from running 5 mins!
-    pending
+  it "uses report url to pull report" do
+    @ym.session do |token|
+      report_token = @ym.send(:request_report_token, token, request_xml)
+      report_url = @ym.send(:retrieve_report_url, token, report_token)
+
+      report = @ym.send(:retrieve_data, report_url)
+      report.should be_instance_of(Yieldmanager::Report)
+      report.headers[0].should == "advertiser_name"
+    end
   end
+  
+  it "offers data as name/value pairs"
+  
+  it "offers data as ordered array"
+  
+  it "complains if report token is nil"
+  
+  # need configurable pause and attempts to keep this from running 5 mins!
+  it "throws ReportTimeoutException if report data never returns"
   
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
