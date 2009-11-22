@@ -60,8 +60,8 @@ the partial dataset on-the-fly or accumulating it for later use.
 
 === Pulling reports
 
-Accessing reportware assumes you've used the "Get Report XML"
-functionality in the UI to get your request XML data, or have
+Accessing reportware assumes you've used the "Get request XML"
+functionality in the UI to get your request XML, or have
 crafted one from scratch. Assuming it's in a variable called
 *request_xml*, you'd access the data this way:
 
@@ -73,12 +73,19 @@ crafted one from scratch. Assuming it's in a variable called
 		end
 	end
 
+Column data can be accessed either by index or column name:
+
+	report.headers # => ['advertiser_name','seller_imps']
+	report.data[0][0] # => "Bob's Ads"
+	report.data[0].by_name('advertiser_name') # => "Bob's Ads"
+	report.data[0].by_name(:advertiser_name) # => "Bob's Ads"
+
 *NOTE* Any totals columns your xml requests will be interpreted
 as ordinary data.
 
 === session vs. start_session/end_session
 
-The +session+ method opens a session, gives you a token to use in your service
+The *session* method opens a session, gives you a token to use in your service
 calls, then closes the session when the block ends, even if an exception is
 raised during processing. It's the recommended method to ensure you don't
 hang connections when things go wrong. If you use start/end, make sure you

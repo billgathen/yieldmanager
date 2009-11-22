@@ -13,6 +13,7 @@ describe "A Yieldmanager report request" do
 
   before(:each) do
     @ym = Yieldmanager::Client.new(login_args)
+    @sample_report = File.join(File.dirname(__FILE__), '..', 'reports', 'sample_report.xml')
   end
   
   it "returns report object" do
@@ -50,10 +51,16 @@ describe "A Yieldmanager report request" do
   end
   
   it "offers data as array of arrays" do
-    @ym.session do |token|
-      report = @ym.pull_report(token, request_xml)
-      report.data[0][0].should_not be_nil
-    end
+    report = Yieldmanager::Report.new
+    report.send(:retrieve_data, @sample_report)
+    report.data[0][0].should == "one"
+  end
+  
+  it "offers data as array of hashes" do
+    report = Yieldmanager::Report.new
+    report.send(:retrieve_data, @sample_report)
+    report.data[0].by_name('first').should == "one"
+    report.data[1].by_name(:second).should == "2"
   end
   
   it "complains if report token is nil"

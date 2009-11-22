@@ -13,7 +13,7 @@
 ** DONE Yieldmanager::Report DTO
 *** DONE headers array (for proper column ordering)
 *** DONE data as array of arrays
-*** data as array of hashes
+*** DONE data as array of hashes (string or symbol keys)
 ** DONE hpricot for parsing (http://github.com/hpricot/hpricot/)
 ** how to handle subtotal/total rows?
 ** cast columns to ruby types based on column[data_type]?

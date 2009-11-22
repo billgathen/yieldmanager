@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RWResponse>
+<RESPONSE>
+<DATA>
+<HEADER>
+<COLUMN>first</COLUMN>
+<COLUMN>second</COLUMN>
+</HEADER>
+<ROW>
+  <COLUMN data_type="text" id="5" >one</COLUMN>
+  <COLUMN data_type="numeric" >1</COLUMN>
+</ROW>
+<ROW>
+  <COLUMN data_type="text" id="12" >two</COLUMN>
+  <COLUMN data_type="numeric" >2</COLUMN>
+</ROW>
+</DATA>
+<METADATA tracking_id="1" rows="2" columns="2" domain="network" timeend="2009-11-22 00:00:00" timestart="2009-11-21 00:00:00" timezone="America/New_York"/>
+</RESPONSE>
+</RWResponse>
