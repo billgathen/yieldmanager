@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{yieldmanager}
-  s.version = "0.2.4"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bill Gathen"]
-  s.date = %q{2009-11-18}
+  s.date = %q{2009-11-21}
   s.description = %q{This gem offers full access to YieldManager's API tools (read/write) as well as ad-hoc reporting through the Reportware tool}
   s.email = %q{bill@billgathen.com}
   s.extra_rdoc_files = [
@@ -27,10 +27,12 @@ Gem::Specification.new do |s|
      "lib/yieldmanager.rb",
      "lib/yieldmanager/builder.rb",
      "lib/yieldmanager/client.rb",
+     "lib/yieldmanager/report.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
      "spec/yieldmanager/builder_spec.rb",
      "spec/yieldmanager/client_spec.rb",
+     "spec/yieldmanager/report_spec.rb",
      "wsdls/1.30/prod/adjustment.wsdl",
      "wsdls/1.30/prod/advertiser.wsdl",
      "wsdls/1.30/prod/campaign.wsdl",
@@ -79,7 +81,8 @@ Gem::Specification.new do |s|
   s.test_files = [
     "spec/spec_helper.rb",
      "spec/yieldmanager/builder_spec.rb",
-     "spec/yieldmanager/client_spec.rb"
+     "spec/yieldmanager/client_spec.rb",
+     "spec/yieldmanager/report_spec.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -88,11 +91,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_runtime_dependency(%q<hpricot>, [">= 0.8.2"])
     else
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_dependency(%q<hpricot>, [">= 0.8.2"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
+    s.add_dependency(%q<hpricot>, [">= 0.8.2"])
   end
 end
 
