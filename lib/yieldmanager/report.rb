@@ -3,8 +3,7 @@ module Yieldmanager
   #
   # The #pull method is typically called by Yieldmanager::Client#pull_report.
   #
-  # Data is returned as an array of keyword hashes, where the
-  # column headers are the keys and the data are the values.
+  # Data is returned as an array of arrays.
   # 
   # Column order is stored in the *headers* array.
   class Report
@@ -43,11 +42,16 @@ private
         headers << col.inner_html
       end
       (doc/"row").each_with_index do |row,idx|
-        row_hash = {}
-        (row/"column").each do |col|
-          row_hash[headers[idx]] = col.inner_html
+        # TODO make data available as keyword hashes, too
+        # row_hash = {}
+        # (row/"column").each do |col|
+        #   row_hash[headers[idx]] = col.inner_html
+        # end
+        # data << row_hash
+        # TODO cast elements to appropriate types based on column attrs
+        data << (row/"column").collect do |col|
+          col.inner_html
         end
-        data << row_hash
       end
     end
   end

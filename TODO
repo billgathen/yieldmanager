@@ -9,9 +9,11 @@
 * DONE add pagination
 * add error-handling (timeouts, too many connections?)
 * add reporting
-** report(xml) method in Client
-** Yieldmanager::Report DTO
-*** headers array (for proper column ordering)
+** DONE pull_report(xml) method in Client
+** DONE Yieldmanager::Report DTO
+*** DONE headers array (for proper column ordering)
+*** DONE data as array of arrays
 *** data as array of hashes
-** fakeweb for testing (http://fakeweb.rubyforge.org/)
-** hpricot for parsing (http://github.com/hpricot/hpricot/)
+** DONE hpricot for parsing (http://github.com/hpricot/hpricot/)
+** how to handle subtotal/total rows?
+** cast columns to ruby types based on column[data_type]?

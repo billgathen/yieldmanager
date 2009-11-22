@@ -23,6 +23,8 @@ To use in a Rails project, add this to config/environment.rb:
 
 === Creating a Yieldmanager::Client
 
+	require 'yieldmanager'
+	
 	@ym = Yieldmanager::Client.new(
 		:user => "bob",
 		:pass => "secret",
@@ -54,6 +56,25 @@ the partial dataset on-the-fly or accumulating it for later use.
 			tot # remember to return total!
 		end
 	end
+
+
+=== Pulling reports
+
+Accessing reportware assumes you've used the "Get Report XML"
+functionality in the UI to get your request XML data, or have
+crafted one from scratch. Assuming it's in a variable called
+*request_xml*, you'd access the data this way:
+
+	@ym.session do |token|
+		report = @ym.pull_report(token, request_xml)
+		puts report.headers.join("\t")
+		report.data.each do |row|
+			puts row.join("\t")
+		end
+	end
+
+*NOTE* Any totals columns your xml requests will be interpreted
+as ordinary data.
 
 === session vs. start_session/end_session
 

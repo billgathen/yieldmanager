@@ -49,11 +49,10 @@ describe "A Yieldmanager report request" do
     end
   end
   
-  it "offers data as name/value pairs" do
+  it "offers data as array of arrays" do
     @ym.session do |token|
       report = @ym.pull_report(token, request_xml)
-      report.data[0]['advertiser_name'].should_not be_nil
-      # report.data[0][0].should == report.data[0]['advertiser_name']
+      report.data[0][0].should_not be_nil
     end
   end
   
