@@ -40,6 +40,15 @@ To use in a Rails project, add this to config/environment.rb:
 	@ym.session do |token|
 		@currencies = @ym.dictionary.getCurrencies(token)
 	end
+
+*GOTCHA* In projects with ActiveRecord enabled (i.e., Rails projects)
+SOAP will identify returned data as AR objects if there's a
+naming collision. For example, if you're running
++@ym.creative.get(token,123)+
+and you have an AR objects for a +creatives+ table in the db, the
+SOAP parser will interpret the returned SOAP object as
+an AR Creative object, resulting in bizarre errors. Uniquely
+re-name your AR object to eliminate the conflict.
 	
 === Pagination
 
