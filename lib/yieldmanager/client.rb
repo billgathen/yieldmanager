@@ -130,7 +130,8 @@ private
     def load_service name
       # FIXME Local wsdl hit throws "unknown element: {http://schemas.xmlsoap.org/wsdl/}definitions"
       # wsdl_path = "file://#{@wsdl_dir}/#{name}.wsdl"
-      wsdl_path = "#{BASE_URL}#{api_version}/#{name}.php?wsdl"
+      base_url = (@env == "prod" ? BASE_URL : BASE_URL_TEST)
+      wsdl_path = "#{base_url}#{api_version}/#{name}.php?wsdl"
       SOAP::WSDLDriverFactory.new(wsdl_path).create_rpc_driver
     end
   end

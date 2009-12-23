@@ -30,6 +30,18 @@ To use in a Rails project, add this to config/environment.rb:
 		:pass => "secret",
 		:api_version => "1.30"
 	)
+	
+The default environment is production.
+To access the test environment, use this:
+
+	@ym = Yieldmanager::Client.new(
+		:user => "bob",
+		:pass => "secret",
+		:api_version => "1.30",
+		:env => "test"
+	)
+
+*NOTE* Changing the environment after creation has no effect!
 
 === Finding available services
 

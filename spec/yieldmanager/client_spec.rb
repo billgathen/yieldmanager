@@ -22,8 +22,10 @@ describe "A new Yieldmanager client" do
   
   it "defaults to prod, accepts override to test" do
     @ym.env.should == "prod"
+    @ym.contact.inspect.should match("api.yieldmanager.com")
     ym_test = Yieldmanager::Client.new(login_args.merge(:env => "test"))
     ym_test.env.should == "test"
+    ym_test.contact.inspect.should match("api-test.yieldmanager.com")
   end
   
   it "displays available services" do
