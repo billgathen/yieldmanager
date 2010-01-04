@@ -9,6 +9,14 @@ $LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
 module Yieldmanager
 end
 
+require 'patch_detector'
+include PatchDetector
+
 require 'yieldmanager/client'
+
+if needs_patching?(:ruby_version => RUBY_VERSION, :minimum_ruby_version_for_patch => "1.8.7")
+  require 'wsdl/patch'
+end
+
 require 'yieldmanager/builder'
 require 'yieldmanager/report'
