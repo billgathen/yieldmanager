@@ -10,10 +10,10 @@ module PatchDetector
     return false if ruby_version.nil? || minimum_ruby_version_for_patch.nil?
 
     minimum_ruby_version_for_patch =~ /(\d+)\.(\d+)\.(\d+)/
-    min_release_milestone, min_release_feature, min_release_bug_fix = [$1, $2, $3].collect(&:to_i)
+    min_release_milestone, min_release_feature, min_release_bug_fix = [$1, $2, $3].collect{|m| m.to_i}
     
     ruby_version =~ /(\d+)\.(\d+)\.(\d+)/
-    ruby_version_milestone, ruby_version_feature, ruby_version_bug_fix = [$1, $2, $3].collect(&:to_i)
+    ruby_version_milestone, ruby_version_feature, ruby_version_bug_fix = [$1, $2, $3].collect{|m| m.to_i}
   
     return true if (ruby_version_milestone >= min_release_milestone) && (ruby_version_feature >= min_release_feature) && (ruby_version_bug_fix >= min_release_bug_fix)  
     return false
