@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'soap/wsdlDriver'
 require 'open-uri'
 require 'hpricot'

@@ -17,6 +17,7 @@ module Yieldmanager
     BASE_URL = "https://api.yieldmanager.com/api-"
     BASE_URL_TEST = "https://api-test.yieldmanager.com/api-"
     WSDL_DIR = File.join(File.dirname(__FILE__), '..', '..', 'wsdls')
+    
     def self.build_wsdls_for api_version
       unless api_version.match(/^\d\.\d{2}/)
         raise ArgumentError, "Non-standard api version"
