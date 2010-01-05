@@ -1,4 +1,5 @@
-puts "Patching WSDL"
+warn "Patching WSDL::Import"
+
 module WSDL
   class Import < Info
     def parse_attr(attr, value)
