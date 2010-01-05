@@ -1,4 +1,4 @@
-warn "Patching WSDL::Import"
+# warn "Patching WSDL::Import"
 
 module WSDL
   class Import < Info

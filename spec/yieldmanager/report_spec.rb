@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-NEED_ENV_ARGS_MSG = <<EOM
+REPORT_NEED_ENV_ARGS_MSG = <<EOM
 Please set these environment variables to match your Yieldmanager account:
 * YIELDMANAGER_USER
 * YIELDMANAGER_PASS
@@ -85,7 +85,7 @@ describe "A Yieldmanager report request" do
   def request_xml
     unless ENV["YIELDMANAGER_CONTACT_ID"] &&
       ENV["YIELDMANAGER_IP_ADDRESS"]
-      raise(ArgumentError, NEED_ENV_ARGS_MSG)
+      raise(ArgumentError, REPORT_NEED_ENV_ARGS_MSG)
     end
     <<EOR
 <?xml version="1.0"?>

@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-NEED_ENV_ARGS_MSG = <<EOM
+CLIENT_NEED_ENV_ARGS_MSG = <<EOM
 Please set these environment variables to match your Yieldmanager account:
 * YIELDMANAGER_USER
 * YIELDMANAGER_PASS
@@ -114,7 +114,7 @@ describe "A new Yieldmanager client" do
     unless ENV["YIELDMANAGER_USER"] &&
       ENV["YIELDMANAGER_PASS"] &&
       ENV["YIELDMANAGER_API_VERSION"]
-      raise(ArgumentError, NEED_ENV_ARGS_MSG)
+      raise(ArgumentError, CLIENT_NEED_ENV_ARGS_MSG)
     end
     @login_args ||= {
       :user => ENV["YIELDMANAGER_USER"],
