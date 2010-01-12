@@ -1,7 +1,7 @@
 = yieldmanager
 
-This gem offers full access to YieldManager's API tools (read/write) and
-(eventually) ad-hoc reporting through the Reportware tool.
+This gem offers read/write access to YieldManager's API tools and
+ad-hoc reporting through the Reportware tool.
 
 Currently it generates a fresh wsdl from the api.yieldmanager.com site the
 first time you use a service (in the future it will use locally-cached
