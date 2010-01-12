@@ -41,6 +41,8 @@ To access the test environment, use this:
 		:env => "test"
 	)
 
+The keys can also be passed as string: 'user', 'pass', 'api_version' and 'env'.
+
 *NOTE* Changing the environment after creation has no effect!
 
 === Finding available services

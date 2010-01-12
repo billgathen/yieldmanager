@@ -42,13 +42,22 @@ module Yieldmanager
     # * :api_version (required) - Yieldmanager API version (i.e., "1.30")
     # * :env (optional) - Yieldmanager environment "prod" or "test" (defaults to prod)
     def initialize(options = nil)
-      unless options && options[:user] && options[:pass] && options[:api_version]
+      unless options &&
+        (options[:user] || options['user']) &&
+        (options[:pass] || options['pass']) &&
+        (options[:api_version] || options['api_version'])
         raise ArgumentError, ":user, :pass and :api_version are required"
       end
-      @user = options[:user]
-      @pass = options[:pass]
-      @api_version = options[:api_version]
-      @env = options[:env] ||= "prod"
+      @user = options[:user] ||= options['user']
+      @pass = options[:pass] ||= options['pass']
+      @api_version = options[:api_version] ||= options['api_version']
+      if options[:env]
+        @env = options[:env]
+      elsif options['env']
+        @env = options['env']
+      else
+        @env = "prod"
+      end
       @wsdl_dir = "#{WSDL_DIR}/#{@api_version}/#{@env}"
       wrap_services
     end

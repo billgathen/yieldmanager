@@ -13,11 +13,21 @@ describe "A new Yieldmanager client" do
   end
   
   it "requires :user, :pass and :api_version as args" do
-    @ym.user.should equal(login_args[:user])
-    @ym.pass.should equal(login_args[:pass])
-    @ym.api_version.should equal(login_args[:api_version])
+    @ym.user.should == login_args[:user]
+    @ym.pass.should == login_args[:pass]
+    @ym.api_version.should == login_args[:api_version]
     lambda { Yieldmanager::Client.new() }.should raise_error(ArgumentError)
     lambda { Yieldmanager::Client.new({}) }.should raise_error(ArgumentError)
+  end
+  
+  it "accepts 'user', 'pass' and 'api_version' as args" do
+    ym = Yieldmanager::Client.new(
+      'user' => ENV['YIELDMANAGER_USER'],
+      'pass' => ENV['YIELDMANAGER_PASS'],
+      'api_version' => ENV['YIELDMANAGER_API_VERSION'])
+    ym.user.should == ENV['YIELDMANAGER_USER']
+    ym.pass.should == ENV['YIELDMANAGER_PASS']
+    ym.api_version.should == ENV['YIELDMANAGER_API_VERSION']
   end
   
   it "defaults to prod, accepts override to test" do
@@ -26,6 +36,9 @@ describe "A new Yieldmanager client" do
     ym_test = Yieldmanager::Client.new(login_args.merge(:env => "test"))
     ym_test.env.should == "test"
     ym_test.contact.inspect.should match("api-test.yieldmanager.com")
+    ym_test2 = Yieldmanager::Client.new(login_args.merge('env' => "test"))
+    ym_test2.env.should == "test"
+    ym_test2.contact.inspect.should match("api-test.yieldmanager.com")
   end
   
   it "displays available services" do
