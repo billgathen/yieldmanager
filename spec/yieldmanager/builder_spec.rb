@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "A build run" do
   WSDL_DIR = File.join(File.dirname(__FILE__), '..', '..', 'wsdls')
-  API_VERSION = "1.30"
+  API_VERSION = "1.31"
   VERSION_DIR = "#{WSDL_DIR}/#{API_VERSION}"
   
   it "rejects non-standard api version" do

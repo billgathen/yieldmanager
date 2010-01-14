@@ -12,7 +12,7 @@ module Yieldmanager
   #   ym = Yieldmanager::Client(
   #     :user => "bob",
   #     :pass => "secret",
-  #     :api_version => "1.30"
+  #     :api_version => "1.31"
   #   )
   #
   #   ym.session do |token|
@@ -26,7 +26,7 @@ module Yieldmanager
     attr_reader :user
     # Yieldmanager password
     attr_reader :pass
-    # Yieldmanager api version (i.e., "1.30")
+    # Yieldmanager api version (i.e., "1.31")
     attr_reader :api_version
     # Yieldmanager environment ("prod" or "test", defaults to "prod")
     attr_reader :env
@@ -39,7 +39,7 @@ module Yieldmanager
     # Options:
     # * :user (required) - Yieldmanager user
     # * :pass (required) - Yieldmanager pass
-    # * :api_version (required) - Yieldmanager API version (i.e., "1.30")
+    # * :api_version (required) - Yieldmanager API version (i.e., "1.31")
     # * :env (optional) - Yieldmanager environment "prod" or "test" (defaults to prod)
     def initialize(options = nil)
       unless options &&
