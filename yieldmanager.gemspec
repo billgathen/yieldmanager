@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{yieldmanager}
-  s.version = "0.4.1"
+  s.version = "0.4.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bill Gathen"]
-  s.date = %q{2010-01-12}
+  s.date = %q{2010-01-14}
   s.description = %q{This gem offers full access to YieldManager's API tools (read/write) as well as ad-hoc reporting through the Reportware tool}
   s.email = %q{bill@billgathen.com}
   s.extra_rdoc_files = [
@@ -76,6 +76,42 @@ Gem::Specification.new do |s|
      "wsdls/1.30/test/site.wsdl",
      "wsdls/1.30/test/target_profile.wsdl",
      "wsdls/1.30/test/xsd_gen.php",
+     "wsdls/1.31/prod/adjustment.wsdl",
+     "wsdls/1.31/prod/campaign.wsdl",
+     "wsdls/1.31/prod/contact.wsdl",
+     "wsdls/1.31/prod/creative.wsdl",
+     "wsdls/1.31/prod/dictionary.wsdl",
+     "wsdls/1.31/prod/entity.wsdl",
+     "wsdls/1.31/prod/insertion_order.wsdl",
+     "wsdls/1.31/prod/line_item.wsdl",
+     "wsdls/1.31/prod/linking.wsdl",
+     "wsdls/1.31/prod/notification.wsdl",
+     "wsdls/1.31/prod/pixel.wsdl",
+     "wsdls/1.31/prod/placement.wsdl",
+     "wsdls/1.31/prod/report.wsdl",
+     "wsdls/1.31/prod/search.wsdl",
+     "wsdls/1.31/prod/section.wsdl",
+     "wsdls/1.31/prod/site.wsdl",
+     "wsdls/1.31/prod/target_profile.wsdl",
+     "wsdls/1.31/prod/xsd_gen.php",
+     "wsdls/1.31/test/adjustment.wsdl",
+     "wsdls/1.31/test/campaign.wsdl",
+     "wsdls/1.31/test/contact.wsdl",
+     "wsdls/1.31/test/creative.wsdl",
+     "wsdls/1.31/test/dictionary.wsdl",
+     "wsdls/1.31/test/entity.wsdl",
+     "wsdls/1.31/test/insertion_order.wsdl",
+     "wsdls/1.31/test/line_item.wsdl",
+     "wsdls/1.31/test/linking.wsdl",
+     "wsdls/1.31/test/notification.wsdl",
+     "wsdls/1.31/test/pixel.wsdl",
+     "wsdls/1.31/test/placement.wsdl",
+     "wsdls/1.31/test/report.wsdl",
+     "wsdls/1.31/test/search.wsdl",
+     "wsdls/1.31/test/section.wsdl",
+     "wsdls/1.31/test/site.wsdl",
+     "wsdls/1.31/test/target_profile.wsdl",
+     "wsdls/1.31/test/xsd_gen.php",
      "yieldmanager.gemspec"
   ]
   s.homepage = %q{http://github.com/billgathen/yieldmanager}
