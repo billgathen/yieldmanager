@@ -1,5 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+INACTIVE= false
 CLIENT_NEED_ENV_ARGS_MSG = <<EOM
 Please set these environment variables to match your Yieldmanager account:
 * YIELDMANAGER_USER
@@ -110,6 +111,24 @@ describe "A new Yieldmanager client" do
         end
       end
     end
+  end
+  
+  it "ignores bogus 'cannot be null' errors" do
+    desc = "bogus line - delete"
+    l = {
+      :description => desc,
+      :status => INACTIVE,
+      :insertion_order_id => -1,
+      :start_time => "#{Date.today-1}T05:00:00", #offset by timezone
+      :end_time => "#{Date.today}T05:00:00", # offset by timezone
+      :pricing_type => "CPM",
+      :amount => 0.00,
+      :budget => 0.00,
+      :imp_budget => 0,
+      :priority => "Normal"
+    }
+    lambda { @ym.session { |t| @ym.line_item.add(t,l) } }.
+      should_not raise_error(/enum_ym_numbers_difference: cannot accept ''/)
   end
   
   describe "A Yieldmanager report" do

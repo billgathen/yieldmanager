@@ -3,6 +3,16 @@ require 'soap/wsdlDriver'
 require 'open-uri'
 require 'hpricot'
 
+# Monkey-patch to eliminate bogus "cannot be null" errors from YM wsdl
+class WSDL::XMLSchema::SimpleType
+  private
+  def check_restriction(value)
+    unless @restriction.valid?(value) || @name.to_s =~ /(enum_creative_third_party_types|enum_ym_numbers_difference)/
+      raise XSD::ValueSpaceError.new("#{@name}: cannot accept '#{value}'")
+    end
+  end
+end
+
 module Yieldmanager
   # This is the frontend for using Yieldmanager programmatically.
   # It can be directly used by the user by creating a

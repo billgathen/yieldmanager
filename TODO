@@ -1,7 +1,10 @@
+* add "compatibility mode" to tolerate ActiveRecord naming collisions
 * resolve bug using local wsdls (currently using remote)
 	"unknown element: {http://schemas.xmlsoap.org/wsdl/}definitions"
 * throwing warning when running in autotest, but not spec?: monkeypatch net/http?
 	"warning: peer certificate won't be verified in this SSL session"
+* DONE add monkey-patch to WSDL::XMLSchema::SimpleType to ignore enum_creative_third_party_types|enum_ym_numbers_difference
+  cannot be null errors
 * DONE (chris) Monkey-patch 1.8.7 to handle targetnamespace bug
 * DONE Using :env => "test" actually hits test environment
 * DONE add session start/end
