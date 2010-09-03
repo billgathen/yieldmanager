@@ -26,6 +26,12 @@ module Yieldmanager
       retrieve_data report_url
     end
 
+    def add_row row_data
+      row = ReportRow.new(self)
+      row_data.each { |ele| row << ele }
+      data << row
+    end
+
 private
     
     def request_report_token token, report, xml
@@ -49,7 +55,7 @@ private
       end
       (doc/"row").each_with_index do |row_elems,idx|
         # TODO cast elements to appropriate types based on column attrs
-        row = ReportRow.new(headers)
+        row = ReportRow.new(self)
         (row_elems/"column").each do |col|
           row << col.inner_html
         end
@@ -58,15 +64,14 @@ private
     end
     
     class ReportRow < Array
-      def initialize headers
-        @name_lookup = {}
-        headers.each_with_index do |header, idx|
-          @name_lookup[header] = idx
-        end
+      def initialize report
+        @report = report
       end
       
       def by_name name
-        at(@name_lookup[name.to_s])
+        idx = @report.headers.index(name.to_s)
+        raise ArgumentError.new("Column not found: '#{name}'") if idx.nil?
+        at(idx)
       end
     end
   end

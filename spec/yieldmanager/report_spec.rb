@@ -62,6 +62,34 @@ describe "A Yieldmanager report request" do
     report.data[0].by_name('first').should == "one"
     report.data[1].by_name(:second).should == "2"
   end
+
+  it "by_name returns 'column not found' error when missing" do
+    report = Yieldmanager::Report.new
+    report.send(:retrieve_data, @sample_report)
+    begin
+      report.data.first.by_name('does_not_exist')
+      fail "Should have thrown ArgumentError"
+    rescue => e
+      e.class.name.should == "ArgumentError"
+      e.message.should == "Column not found: 'does_not_exist'"
+    end
+  end
+
+  it "supports data report faking" do
+    report = Yieldmanager::Report.new
+    report.headers = ["first","second"]
+    report.add_row([1,2])
+    report.data.first.by_name("first").should == 1
+    report.data.first.by_name("second").should == 2
+  end
+
+  it "supports header name editing after data pull" do
+    report = Yieldmanager::Report.new
+    report.send(:retrieve_data, @sample_report)
+    report.data.first.by_name('first').should == "one"
+    report.headers[0] = 'new_first'
+    report.data.first.by_name('new_first').should == "one"
+  end
   
   it "complains if report token is nil"
   

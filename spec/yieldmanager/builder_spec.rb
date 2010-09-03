@@ -5,6 +5,10 @@ describe "A build run" do
   API_VERSION = "1.31"
   VERSION_DIR = "#{WSDL_DIR}/#{API_VERSION}"
   
+  before do
+    pending
+  end
+
   it "rejects non-standard api version" do
     ["", "a", "1"].each do |v|
       lambda { Yieldmanager::Builder.build_wsdls_for(v) }.should raise_error(ArgumentError)
@@ -54,6 +58,10 @@ describe "A build run" do
 end
 
 describe "A delete run" do
+  before do
+    pending
+  end
+
   it "removes directory structure" do
     contact_wsdl = "#{VERSION_DIR}/prod/contact.wsdl"
     contact_wsdl_test = "#{VERSION_DIR}/test/contact.wsdl"
