@@ -103,8 +103,22 @@ Column data can be accessed either by index or column name:
 	report.data[0].by_name('advertiser_name') # => "Bob's Ads"
 	report.data[0].by_name(:advertiser_name) # => "Bob's Ads"
 
+If you call *by_name* with a non-existent column, it will throw an
+*ArgumentError* telling you so.
+
 *NOTE* Any totals columns your xml requests will be interpreted
 as ordinary data.
+
+=== Mocking reports
+
+When simulating report calls without actually hitting Yieldmanager, you can
+create your own reports.
+
+  rpt = Yieldmanager::Report.new
+  rpt.headers = ["first","second"]
+  rpt.add_row([1,2])
+  rpt.data.first.by_name("first").should == 1
+  rpt.data.first.by_name("second").should == 2
 
 === session vs. start_session/end_session
 
