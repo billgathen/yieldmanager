@@ -106,6 +106,12 @@ Column data can be accessed either by index or column name:
 If you call *by_name* with a non-existent column, it will throw an
 *ArgumentError* telling you so.
 
+Or you can extract the report to an array of named hashes, removing
+dependencies on the gem for consumers of the data (say, across an API):
+
+  hashes = report.to_hashes
+  hashes[0]['advertiser_name'] # => "Bob's Ads"
+
 *NOTE* Any totals columns your xml requests will be interpreted
 as ordinary data.
 

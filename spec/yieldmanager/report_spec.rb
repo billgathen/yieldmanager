@@ -56,11 +56,20 @@ describe "A Yieldmanager report request" do
     report.data[0][0].should == "one"
   end
   
-  it "offers data as array of hashes" do
+  it "offers data by name" do
     report = Yieldmanager::Report.new
     report.send(:retrieve_data, @sample_report)
     report.data[0].by_name('first').should == "one"
     report.data[1].by_name(:second).should == "2"
+  end
+  
+  it "offers data as array of hashes" do
+    report = Yieldmanager::Report.new
+    report.send(:retrieve_data, @sample_report)
+    hashes = report.to_hashes
+    hashes.size.should == 2
+    hashes[0]['first'].should == "one"
+    hashes[1]['second'].should == "2"
   end
 
   it "by_name returns 'column not found' error when missing" do

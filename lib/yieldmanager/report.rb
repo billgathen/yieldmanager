@@ -32,6 +32,18 @@ module Yieldmanager
       data << row
     end
 
+    def to_hashes
+      hashes = []
+      data.each do |row|
+        row_hash = {}
+        row.each_with_index do |ele,idx|
+          row_hash[headers[idx]] = ele
+        end
+        hashes << row_hash
+      end
+      hashes
+    end
+
 private
     
     def request_report_token token, report, xml
