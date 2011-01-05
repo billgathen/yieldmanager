@@ -1,5 +1,7 @@
 require 'open-uri'
-require 'ftools'
+if RUBY_VERSION[0,3] != "1.9"
+  require 'ftools'
+end
 require 'fileutils'
 
 module Yieldmanager
@@ -39,7 +41,7 @@ private
         if File.exists?(dir)
           FileUtils.rm_rf dir
         end
-        File.makedirs(dir)
+        FileUtils::mkdir_p(dir)
       end
     end
     

@@ -28,7 +28,7 @@ describe "A build run" do
     ["test","prod"].each do |env|
       dir = "#{WSDL_DIR}/#{API_VERSION}/#{env}"
       bad_wsdl = "#{dir}/bad.wsdl"
-      File.makedirs(dir)
+      FileUtils::mkdir_p(dir)
       File.open(bad_wsdl, "w") { |file| file.write("bad.wsdl")  }
       Yieldmanager::Builder.build_wsdls_for(API_VERSION)
       File.exists?(bad_wsdl).should be_false
