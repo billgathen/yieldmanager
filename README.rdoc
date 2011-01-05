@@ -134,6 +134,13 @@ raised during processing. It's the recommended method to ensure you don't
 hang connections when things go wrong. If you use start/end, make sure you
 wrap your logic in a begin/ensure clause and call end_session from the ensure.
 
+== RE: Ruby 1.9
+
+In an effort to be a good ruby citizen, KarateCode and I have made the gem
+1.9 compatible, but it is based on soap4r 1.5.8, which generates some warnings
+in 1.9. Until a newer version of soap4r is released, you may see some of these
+warnings at runtime. Rest assured I'll upgrade as soon as soap4r does.
+
 == Note on Patches/Pull Requests
  
 * Fork the project.
@@ -145,6 +152,10 @@ wrap your logic in a begin/ensure clause and call end_session from the ensure.
   bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
+== Thanks for contributing!
+* manlycode[https://github.com/manlycode] (Chris Rittersdorf)
+* KarateCode[https://github.com/KarateCode] (Michael Schneider)
+
 == Copyright
 
-Copyright (c) 2009 Bill Gathen. See LICENSE for details.
+Copyright (c) 2009-2011 Bill Gathen. See LICENSE for details.
