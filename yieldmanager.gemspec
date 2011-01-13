@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{yieldmanager}
-  s.version = "0.7.0"
+  s.version = "0.8.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bill Gathen"]
-  s.date = %q{2011-01-05}
+  s.date = %q{2011-01-13}
   s.description = %q{This gem offers full access to YieldManager's API tools (read/write) as well as ad-hoc reporting through the Reportware tool}
   s.email = %q{bill@billgathen.com}
   s.extra_rdoc_files = [
@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
     ".rspec",
+    "API_VERSION",
     "LICENSE",
     "README.rdoc",
     "Rakefile",
