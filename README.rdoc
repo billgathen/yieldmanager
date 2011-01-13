@@ -7,6 +7,8 @@ Currently it generates a fresh wsdl from the api.yieldmanager.com site the
 first time you use a service (in the future it will use locally-cached
 copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 
+This version implements API version 1.33
+
 === Installation
 
 Yieldmanager is available as a gem on gemcutter.org.
@@ -27,8 +29,7 @@ To use in a Rails project, add this to config/environment.rb:
 	
 	@ym = Yieldmanager::Client.new(
 		:user => "bob",
-		:pass => "secret",
-		:api_version => "1.33"
+		:pass => "secret"
 	)
 	
 The default environment is production.
@@ -36,14 +37,19 @@ To access the test environment, use this:
 
 	@ym = Yieldmanager::Client.new(
 		:user => "bob",
-		:pass => "secret",
-		:api_version => "1.33",
+		:pass => "secret"
 		:env => "test"
 	)
 
-The keys can also be passed as string: 'user', 'pass', 'api_version' and 'env'.
+The keys can also be passed as string: 'user', 'pass' and 'env'.
 
 *NOTE* Changing the environment after creation has no effect!
+
+=== What API version am I using?
+
+To check (or log) the current API version, execute the following:
+
+  Yieldmanager::Client.api_version
 
 === Finding available services
 

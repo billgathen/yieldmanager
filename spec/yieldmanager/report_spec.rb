@@ -4,7 +4,6 @@ REPORT_NEED_ENV_ARGS_MSG = <<EOM
 Please set these environment variables to match your Yieldmanager account:
 * YIELDMANAGER_USER
 * YIELDMANAGER_PASS
-* YIELDMANAGER_API_VERSION
 * YIELDMANAGER_CONTACT_ID (get this from the contact_id attribute in any UI-created reportware report)
 * YIELDMANAGER_IP_ADDRESS (your external IP address)
 EOM
@@ -107,14 +106,12 @@ describe "A Yieldmanager report request" do
   
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
-      ENV["YIELDMANAGER_PASS"] &&
-      ENV["YIELDMANAGER_API_VERSION"]
-      raise(ArgumentError, NEED_ENV_ARGS_MSG)
+      ENV["YIELDMANAGER_PASS"]
+      raise(ArgumentError, REPORT_NEED_ENV_ARGS_MSG)
     end
     @login_args ||= {
       :user => ENV["YIELDMANAGER_USER"],
       :pass => ENV["YIELDMANAGER_PASS"],
-      :api_version => ENV["YIELDMANAGER_API_VERSION"],
       :env => "test"
     }
   end

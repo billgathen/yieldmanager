@@ -5,30 +5,36 @@ CLIENT_NEED_ENV_ARGS_MSG = <<EOM
 Please set these environment variables to match your Yieldmanager account:
 * YIELDMANAGER_USER
 * YIELDMANAGER_PASS
-* YIELDMANAGER_API_VERSION
 EOM
+
+describe "api version" do
+  it "pulls api version from file" do
+    Yieldmanager::Client.api_version.should == "1.33"
+  end
+end
 
 describe "A new Yieldmanager client" do
   before(:each) do
     @ym = Yieldmanager::Client.new(login_args)
   end
   
-  it "requires :user, :pass and :api_version as args" do
+  it "requires :user and :pass as args" do
     @ym.user.should == login_args[:user]
     @ym.pass.should == login_args[:pass]
-    @ym.api_version.should == login_args[:api_version]
+    @ym.api_version.should == Yieldmanager::Client.api_version
     lambda { Yieldmanager::Client.new() }.should raise_error(ArgumentError)
     lambda { Yieldmanager::Client.new({}) }.should raise_error(ArgumentError)
   end
   
-  it "accepts 'user', 'pass' and 'api_version' as args" do
+  it "accepts 'user', 'pass' as args" do
+    ignored_api_version = "1.11"
     ym = Yieldmanager::Client.new(
       'user' => ENV['YIELDMANAGER_USER'],
       'pass' => ENV['YIELDMANAGER_PASS'],
-      'api_version' => ENV['YIELDMANAGER_API_VERSION'])
+      'api_version' => ignored_api_version)
     ym.user.should == ENV['YIELDMANAGER_USER']
     ym.pass.should == ENV['YIELDMANAGER_PASS']
-    ym.api_version.should == ENV['YIELDMANAGER_API_VERSION']
+    ym.api_version.should == Yieldmanager::Client.api_version
   end
   
   it "defaults to prod, accepts override to test" do
@@ -144,14 +150,12 @@ describe "A new Yieldmanager client" do
   
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
-      ENV["YIELDMANAGER_PASS"] &&
-      ENV["YIELDMANAGER_API_VERSION"]
+      ENV["YIELDMANAGER_PASS"]
       raise(ArgumentError, CLIENT_NEED_ENV_ARGS_MSG)
     end
     @login_args ||= {
       :user => ENV["YIELDMANAGER_USER"],
-      :pass => ENV["YIELDMANAGER_PASS"],
-      :api_version => ENV["YIELDMANAGER_API_VERSION"]
+      :pass => ENV["YIELDMANAGER_PASS"]
     }
   end
 

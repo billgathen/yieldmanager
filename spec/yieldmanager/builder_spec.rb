@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "A build run" do
   WSDL_DIR = File.join(File.dirname(__FILE__), '..', '..', 'wsdls')
-  API_VERSION = "1.33"
+  API_VERSION = Yieldmanager::Client.api_version
   VERSION_DIR = "#{WSDL_DIR}/#{API_VERSION}"
   
   before do

@@ -62,8 +62,7 @@ module Yieldmanager
   #
   #   ym = Yieldmanager::Client(
   #     :user => "bob",
-  #     :pass => "secret",
-  #     :api_version => "1.33"
+  #     :pass => "secret"
   #   )
   #
   #   ym.session do |token|
@@ -90,18 +89,16 @@ module Yieldmanager
     # Options:
     # * :user (required) - Yieldmanager user
     # * :pass (required) - Yieldmanager pass
-    # * :api_version (required) - Yieldmanager API version (i.e., "1.33")
     # * :env (optional) - Yieldmanager environment "prod" or "test" (defaults to prod)
     def initialize(options = nil)
       unless options &&
         (options[:user] || options['user']) &&
-        (options[:pass] || options['pass']) &&
-        (options[:api_version] || options['api_version'])
-        raise ArgumentError, ":user, :pass and :api_version are required"
+        (options[:pass] || options['pass'])
+        raise ArgumentError, ":user and :pass are required"
       end
       @user = options[:user] ||= options['user']
       @pass = options[:pass] ||= options['pass']
-      @api_version = options[:api_version] ||= options['api_version']
+      @api_version = Yieldmanager::Client.api_version
       if options[:env]
         @env = options[:env]
       elsif options['env']
@@ -171,6 +168,14 @@ module Yieldmanager
       report = Yieldmanager::Report.new
       report.pull(token, self.report, xml)
       report
+    end
+
+    def self.api_version
+      version_file = "API_VERSION"
+      unless File.exists?(version_file)
+        fail "Put the API version in a file called #{version_file}"
+      end
+      File.open(version_file){ |f| f.readline.chomp }
     end
 
 private
