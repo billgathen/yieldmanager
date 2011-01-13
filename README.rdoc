@@ -28,7 +28,7 @@ To use in a Rails project, add this to config/environment.rb:
 	@ym = Yieldmanager::Client.new(
 		:user => "bob",
 		:pass => "secret",
-		:api_version => "1.31"
+		:api_version => "1.33"
 	)
 	
 The default environment is production.
@@ -37,7 +37,7 @@ To access the test environment, use this:
 	@ym = Yieldmanager::Client.new(
 		:user => "bob",
 		:pass => "secret",
-		:api_version => "1.31",
+		:api_version => "1.33",
 		:env => "test"
 	)
 
