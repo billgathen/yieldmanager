@@ -172,10 +172,11 @@ module Yieldmanager
 
     def self.api_version
       version_file = "API_VERSION"
-      unless File.exists?(version_file)
+      path = File.join(File.dirname(__FILE__), '..', '..', version_file)
+      unless File.exists?(path)
         fail "Put the API version in a file called #{version_file}"
       end
-      File.open(version_file){ |f| f.readline.chomp }
+      File.open(path){ |f| f.readline.chomp }
     end
 
 private
