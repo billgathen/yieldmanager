@@ -1,16 +1,3 @@
-# Patch bogus SSL_CONNECT error in retrieve_data
-# via KarateCode[https://github.com/KarateCode] (Michael Schneider)
-#
-require 'openssl'
-module OpenSSL
-  module SSL
-    remove_const :VERIFY_PEER
-  end
-end
-OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-#
-#
-
 module Yieldmanager
   # This is the data object for all reportware requests.
   #
