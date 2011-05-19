@@ -6,6 +6,7 @@ Please set these environment variables to match your Yieldmanager account:
 * YIELDMANAGER_PASS
 * YIELDMANAGER_CONTACT_ID (get this from the contact_id attribute in any UI-created reportware report)
 * YIELDMANAGER_IP_ADDRESS (your external IP address)
+* YIELDMANAGER_ENTITY_ID
 EOM
   
 describe "A Yieldmanager report request" do
@@ -104,6 +105,34 @@ describe "A Yieldmanager report request" do
   # need configurable pause and attempts to keep this from running 5 mins!
   it "throws ReportTimeoutException if report data never returns"
   
+  it "throw HTTPError if response code is 404 and pull of report failed" do
+    @ym.session do |token|
+      rpt = Yieldmanager::Report.new
+      report_token = rpt.send(:request_report_token, token, @ym.report, request_xml)
+      report_url = rpt.send(:retrieve_report_url, token, @ym.report, report_token) + "300"
+      begin
+        rpt.send(:retrieve_data, report_url)
+        fail "Should have thrown ArgumentError"
+      rescue => e
+        e.message.should == "404 Not Found"
+      end
+    end
+  end
+
+  it "throw HTTPError if response code is non 404 and non success of report failed" do
+    @ym.session do |token|
+      rpt = Yieldmanager::Report.new
+      report_url = "https://api.yieldmanager.com/report_not_found"
+      begin
+        rpt.send(:retrieve_data, report_url)
+        fail "Should have thrown HTTPError"
+      rescue => e
+        e.message.should_not == "404 Not Found"
+      end
+    end
+  end
+
+  
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
       ENV["YIELDMANAGER_PASS"]
@@ -118,13 +147,13 @@ describe "A Yieldmanager report request" do
 
   def request_xml
     unless ENV["YIELDMANAGER_CONTACT_ID"] &&
-      ENV["YIELDMANAGER_IP_ADDRESS"]
+      ENV["YIELDMANAGER_IP_ADDRESS"] && ENV['YIELDMANAGER_ENTITY_ID']
       raise(ArgumentError, REPORT_NEED_ENV_ARGS_MSG)
     end
     <<EOR
 <?xml version="1.0"?>
 <RWRequest clientName="ui.ent.prod">
-  <REQUEST domain="network" service="ComplexReport" nocache="n" contact_id="#{ENV['YIELDMANAGER_CONTACT_ID']}" remote_ip_address="#{ENV['YIELDMANAGER_IP_ADDRESS']}" entity="3" filter_entity_id="3" timezone="EST">
+  <REQUEST domain="network" service="ComplexReport" nocache="n" contact_id="#{ENV['YIELDMANAGER_CONTACT_ID']}" remote_ip_address="#{ENV['YIELDMANAGER_IP_ADDRESS']}" entity="#{ENV['YIELDMANAGER_ENTITY_ID']}" filter_entity_id="#{ENV['YIELDMANAGER_ENTITY_ID']}" timezone="EST">
     <ROWS>
       <ROW type="group" priority="1" ref="entity_id" includeascolumn="n"/>
       <ROW type="group" priority="2" ref="advertiser_id" includeascolumn="n"/>

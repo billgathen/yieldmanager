@@ -74,7 +74,20 @@ private
     end
     
     def retrieve_data url
-      doc = open(url) { |f| Hpricot(f) }
+      
+      second_pull_attempt = false
+      begin
+        doc = open(url) { |f| Hpricot(f) }
+      rescue OpenURI::HTTPError => the_error
+        raise the_error if second_pull_attempt
+        raise the_error unless the_error.io.status.first == "404"
+        
+        # sleep 10 seconds while we wait for reportware to place the report at the destination url
+        sleep(10)
+        second_pull_attempt = true
+        retry
+      end
+      
       (doc/"header column").each do |col|
         headers << col.inner_html
       end
