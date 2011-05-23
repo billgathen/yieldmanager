@@ -91,7 +91,7 @@ private
       (doc/"header column").each do |col|
         headers << col.inner_html
       end
-      (doc/"row").each_with_index do |row_elems,idx|
+      (doc/"row").each do |row_elems|
         # TODO cast elements to appropriate types based on column attrs
         row = ReportRow.new(self)
         (row_elems/"column").each do |col|
