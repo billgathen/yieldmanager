@@ -49,9 +49,6 @@ describe "A new Yieldmanager client" do
     lambda {
       Yieldmanager::Client.new(login_args.merge('env' => "testee"))
     }.should raise_error(ArgumentError)
-    lambda {
-      Yieldmanager::Client.new(login_args.merge('env' => :testee))
-    }.should raise_error(ArgumentError)
   end
   
   it "displays available services" do

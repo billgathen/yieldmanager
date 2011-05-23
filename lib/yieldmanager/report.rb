@@ -2,6 +2,8 @@
 # via KarateCode[https://github.com/KarateCode] (Michael Schneider)
 #
 require 'openssl'
+require 'fastercsv' if RUBY_VERSION[0,3] != "1.9"
+
 module OpenSSL
   module SSL
     remove_const :VERIFY_PEER
@@ -26,14 +28,15 @@ module Yieldmanager
   # 
   # Column order is stored in the *headers* array.
   class Report
-    attr_accessor :headers, :data
+    attr_accessor :headers, :data, :is_a_csv_report
     
     def initialize
       self.headers = []
       self.data = []
     end
     
-    def pull token, report, xml
+    def pull token, report, xml, is_csv = false
+      self.is_a_csv_report = is_csv
       report_token = request_report_token token, report, xml
       report_url = retrieve_report_url token, report, report_token
       retrieve_data report_url
@@ -74,10 +77,10 @@ private
       report_url
     end
     
-    def retrieve_data url      
+    def retrieve_data url
       second_pull_attempt = false
       begin
-        doc = open(url) { |f| Hpricot(f) }
+        doc = open(url)
       rescue OpenURI::HTTPError => the_error
         raise the_error if second_pull_attempt
         raise the_error unless the_error.io.status.first == "404"
@@ -88,16 +91,30 @@ private
         retry
       end
       
-      (doc/"header column").each do |col|
-        headers << col.inner_html
-      end
-      (doc/"row").each do |row_elems|
-        # TODO cast elements to appropriate types based on column attrs
-        row = ReportRow.new(self)
-        (row_elems/"column").each do |col|
-          row << col.inner_html
+      if is_a_csv_report
+        data_set = FasterCSV.read(doc.path)
+        self.headers = data_set.shift.split(",")
+        data_set[0,data_set.size-3].each do |csv_row| # the three junk lines at the end of the report
+          row = ReportRow.new(self)
+          csv_row.each do |col|
+            row << col
+          end
+          self.data << row
         end
-        data << row
+      else        
+        doc = Hpricot(doc)
+        (doc/"header column").each do |col|
+          self.headers << col.inner_html
+        end
+        (doc/"row").each do |row_elems|
+          # TODO cast elements to appropriate types based on column attrs
+        
+          row = ReportRow.new(self)
+          (row_elems/"column").each do |col|
+            row << col.inner_html
+          end
+          self.data << row
+        end
       end
     end
     

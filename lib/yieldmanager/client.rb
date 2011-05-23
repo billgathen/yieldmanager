@@ -92,17 +92,14 @@ module Yieldmanager
     # * :user (required) - Yieldmanager user
     # * :pass (required) - Yieldmanager pass
     # * :env (optional) - Yieldmanager environment "prod" or "test" (defaults to prod)
-    def initialize(options = nil)
-      unless options &&
-        (options[:user] || options['user']) &&
-        (options[:pass] || options['pass'])
-        raise ArgumentError, ":user and :pass are required"
-      end
+    def initialize(options = [])
       @user = options[:user] ||= options['user']
       @pass = options[:pass] ||= options['pass']
+      raise ArgumentError, ":user and :pass are required" unless @user && @pass
+      
       @api_version = Yieldmanager::Client.api_version
       
-      @env = (options[:env] || options['env'] || "prod").to_s
+      @env = (options[:env] || options['env'] || "prod")
       raise ArgumentError, ":env must be 'test' or 'prod', was #{@env.inspect}" unless AVAILABLE_ENVS.include?(@env)
       
       @wsdl_dir = "#{WSDL_DIR}/#{@api_version}/#{@env}"
