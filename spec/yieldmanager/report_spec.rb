@@ -102,8 +102,10 @@ describe "A Yieldmanager report request" do
   
   it "complains if report token is nil"
   
-  # need configurable pause and attempts to keep this from running 5 mins!
+  # need configurable pause and attempts to keep this from running 10 mins!
   it "throws ReportTimeoutException if report data never returns"
+
+  it "throws StandardException if report url is blank"
   
   it "throw HTTPError if response code is 404 and pull of report failed" do
     @ym.session do |token|

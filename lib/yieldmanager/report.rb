@@ -65,16 +65,16 @@ private
 
     def retrieve_report_url token, report, report_token
       report_url = nil
-      60.times do |secs| # Poll until report ready
+      120.times do |secs| # Poll until report ready
         report_url = report.status(token,report_token)
         break if report_url != nil
         sleep(5)
       end
+      raise "ReportWare url is blank" if report_url.nil? || report_url.empty?
       report_url
     end
     
-    def retrieve_data url
-      
+    def retrieve_data url      
       second_pull_attempt = false
       begin
         doc = open(url) { |f| Hpricot(f) }
