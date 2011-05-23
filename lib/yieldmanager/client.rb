@@ -92,7 +92,7 @@ module Yieldmanager
     # * :user (required) - Yieldmanager user
     # * :pass (required) - Yieldmanager pass
     # * :env (optional) - Yieldmanager environment "prod" or "test" (defaults to prod)
-    def initialize(options = [])
+    def initialize(options = {})
       @user = options[:user] ||= options['user']
       @pass = options[:pass] ||= options['pass']
       raise ArgumentError, ":user and :pass are required" unless @user && @pass
@@ -160,9 +160,9 @@ module Yieldmanager
     # Pulls report from RightMedia, returned as Yieldmanager::Report
     #
     # Must be called within the context of a session
-    def pull_report token, xml
+    def pull_report token, xml, report_response_format = "xml"
       report = Yieldmanager::Report.new
-      report.pull(token, self.report, xml)
+      report.pull(token, self.report, xml, report_response_format)
       report
     end
 
