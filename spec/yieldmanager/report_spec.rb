@@ -116,11 +116,12 @@ describe "A Yieldmanager report request" do
   
   it "should try a second time to get a report" do
     @ym.session do |token|
-      rpt = Yieldmanager::Report.new
+      @rpt = Yieldmanager::Report.new
       report_url = "http://api.yieldmanager.com/reports/xxxxxxx"
-      rpt.should_receive(:open_report).with(report_url).and_raise(OpenURI::HTTPError)
-      rpt.should_receive(:open_report).with(report_url).and_return(@sample_report)
-      rpt.send(:retrieve_data, report_url)
+      
+      @rpt.should_receive(:open_report).with(report_url).and_raise(OpenURI::HTTPError.new("404 Not Found","404 Not Found"))
+      @rpt.should_receive(:open_report).with(report_url).and_return(@sample_report)
+      @rpt.send(:retrieve_data, report_url)
     end
   end
   

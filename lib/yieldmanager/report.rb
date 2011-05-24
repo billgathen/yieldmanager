@@ -88,7 +88,7 @@ private
         rmx_report = open_report(url)
       rescue OpenURI::HTTPError => the_error
         raise the_error if second_pull_attempt
-        raise the_error unless the_error.io.status.first == "404"
+        raise the_error unless the_error.message.include?("404")
         
         # sleep 10 seconds while we wait for reportware to place the report at the destination url
         sleep(10)
