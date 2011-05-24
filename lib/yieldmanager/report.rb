@@ -2,7 +2,7 @@
 # via KarateCode[https://github.com/KarateCode] (Michael Schneider)
 #
 require 'openssl'
-require 'fastercsv' if RUBY_VERSION[0,3] != "1.9"
+require 'fastercsv' unless RUBY_VERSION[0,3] == "1.9"
 
 module OpenSSL
   module SSL
@@ -78,10 +78,14 @@ private
       report_url
     end
     
+    def open_report url
+      open(url)
+    end
+    
     def retrieve_data url
       second_pull_attempt = false
       begin
-        rmx_report = open(url)
+        rmx_report = open_report(url)
       rescue OpenURI::HTTPError => the_error
         raise the_error if second_pull_attempt
         raise the_error unless the_error.io.status.first == "404"

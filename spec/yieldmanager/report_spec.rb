@@ -100,40 +100,29 @@ describe "A Yieldmanager report request" do
     report.data.first.by_name('new_first').should == "one"
   end
   
-  it "complains if report token is nil"
-  
-  # need configurable pause and attempts to keep this from running 10 mins!
-  it "throws ReportTimeoutException if report data never returns"
-
-  it "throws StandardException if report url is blank"
-  
-  it "throw HTTPError if response code is 404 and pull of report failed" do
+  it "throw HTTPError 404 Not Found" do
     @ym.session do |token|
       rpt = Yieldmanager::Report.new
       report_token = rpt.send(:request_report_token, token, @ym.report, request_xml)
       report_url = rpt.send(:retrieve_report_url, token, @ym.report, report_token) + "300"
       begin
         rpt.send(:retrieve_data, report_url)
-        fail "Should have thrown ArgumentError"
+        fail "Should have thrown HTTPError"
       rescue => e
         e.message.should == "404 Not Found"
       end
     end
   end
-
-  it "throw HTTPError if response code is non 404 and non success of report failed" do
+  
+  it "should try a second time to get a report" do
     @ym.session do |token|
       rpt = Yieldmanager::Report.new
-      report_url = "https://api.yieldmanager.com/report_not_found"
-      begin
-        rpt.send(:retrieve_data, report_url)
-        fail "Should have thrown HTTPError"
-      rescue => e
-        e.message.should_not == "404 Not Found"
-      end
+      report_url = "http://api.yieldmanager.com/reports/xxxxxxx"
+      rpt.should_receive(:open_report).with(report_url).and_raise(OpenURI::HTTPError)
+      rpt.should_receive(:open_report).with(report_url).and_return(@sample_report)
+      rpt.send(:retrieve_data, report_url)
     end
   end
-
   
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
