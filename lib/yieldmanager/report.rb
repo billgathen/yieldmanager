@@ -69,7 +69,7 @@ private
 
     def retrieve_report_url token, report, report_token
       report_url = nil
-      120.times do |secs| # Poll until report ready
+      240.times do |secs| # Poll until report ready
         report_url = report.status(token,report_token)
         break if report_url != nil
         sleep(5)
