@@ -106,7 +106,7 @@ private
     end
     
     def parse_csv_report rmx_report
-      data_set = FasterCSV.read(rmx_report.path)
+      data_set = FasterCSV.new(rmx_report).read
       self.headers = data_set.shift
       # the three junk lines at the end of the report
       data_set[0,data_set.size - 3].each { |csv_row| add_row csv_row }
