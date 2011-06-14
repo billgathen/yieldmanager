@@ -17,7 +17,7 @@ if (RUBY_VERSION.start_with?("1.9"))
   # This patch based on Tomer Doron's "Fixing soap4r for ruby 1.9" post
   # http://tomerdoron.blogspot.com/2009/10/fixing-soap4r-for-ruby-19.html
   #
-  $LOAD_PATH.unshift 'lib/soap4r_19_patch'
+  $LOAD_PATH.unshift "#{dir}/soap4r_19_patch"
 end
 
 require 'yieldmanager/client'
