@@ -7,7 +7,7 @@ Currently it generates a fresh wsdl from the api.yieldmanager.com site the
 first time you use a service (in the future it will use locally-cached
 copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 
-This version implements API version 1.33
+This version implements API version 1.33.
 
 ### Installation
 
@@ -17,10 +17,10 @@ Yieldmanager is available as a gem for easy installation.
 
 or if you're using [RVM](https://rvm.beginrescueend.com/) (and why on earth wouldn't you?)
 
-  gem install yieldmanager
-
+	gem install yieldmanager
+  
 The project is available for review/forking on github.com
-
+  
 	git clone git://github.com/billgathen/yieldmanager.git
 
 To use in a Rails project, add this to config/environment.rb:
@@ -53,7 +53,7 @@ The keys can also be passed as strings: 'user', 'pass' and 'env'.
 
 To check (or log) the current API version, execute the following:
 
-  Yieldmanager::Client.api_version
+	Yieldmanager::Client.api_version
 
 ### Finding available services
 
@@ -121,8 +121,8 @@ If you call **by_name** with a non-existent column, it will throw an
 Or you can extract the report to an array of named hashes, removing
 dependencies on the gem for consumers of the data (say, across an API):
 
-  hashes = report.to_hashes
-  hashes[0]['advertiser_name'] # => "Bob's Ads"
+	hashes = report.to_hashes
+	hashes[0]['advertiser_name'] # => "Bob's Ads"
 
 **NOTE** Any totals columns your xml requests will be interpreted
 as ordinary data.
@@ -132,11 +132,11 @@ as ordinary data.
 When simulating report calls without actually hitting Yieldmanager, you can
 create your own reports.
 
-  rpt = Yieldmanager::Report.new
-  rpt.headers = ["first","second"]
-  rpt.add_row([1,2])
-  rpt.data.first.by_name("first").should == 1
-  rpt.data.first.by_name("second").should == 2
+	rpt = Yieldmanager::Report.new
+	rpt.headers = ["first","second"]
+	rpt.add_row([1,2])
+	rpt.data.first.by_name("first").should == 1
+	rpt.data.first.by_name("second").should == 2
 
 ### session vs. start_session/end_session
 
