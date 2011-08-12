@@ -138,6 +138,30 @@ create your own reports.
 	rpt.data.first.by_name("first").should == 1
 	rpt.data.first.by_name("second").should == 2
 
+### Wiredumps (SOAP logging)
+
+To see the nitty-gritty of what's going over the wire (Yahoo tech support often asks for this),
+you can activate a "wiredump" on a per-service basis. Typically you just echo it to standard out.
+For instance:
+
+	client.entity.wiredump_dev = $stdout # on
+	adv = client.entity.get(token,12345)
+	client.entity.wiredump_dev = nil # off
+
+For Rails in a passenger environment, standard out doesn't end up in the logfiles.
+Instead, redirect to a file:
+
+	wiredump = File.new("#{Rails.root}/log/wiredump_entity_#{Time.new.strftime('%H%M%S')}.log",'w')
+	client.entity.wiredump_dev = wiredump # on
+
+	adv = client.entity.get(token,12345)
+
+	wiredump.flush # make sure everything gets in there before it closes
+	client.entity.wiredump_dev = nil # off
+
+The last 2 lines belong in an ensure block, so the file is created even
+when there's an error (which is probably why you're doing this).
+
 ### session vs. start_session/end_session
 
 The **session** method opens a session, gives you a token to use in your service
