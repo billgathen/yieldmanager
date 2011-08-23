@@ -9,7 +9,7 @@ begin
 rescue LoadError
   require 'rspec'
   require 'rspec/autorun'
-  Rspec.configure do |config|
+  RSpec.configure do |config|
   end
 end
 require 'patch_detector'

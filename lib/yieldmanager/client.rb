@@ -1,4 +1,4 @@
-require 'rubygems'
+require 'rubygems' unless RUBY_VERSION.start_with?("1.9")
 require 'soap/wsdlDriver'
 require 'open-uri'
 require 'hpricot'
