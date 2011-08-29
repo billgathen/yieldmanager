@@ -2,7 +2,6 @@ require 'rubygems' unless RUBY_VERSION.start_with?("1.9")
 require 'soap/wsdlDriver'
 require 'open-uri'
 require 'hpricot'
-require 'xsd/xmlparser/nokogiri'
 
 # 1.8.7 uses Hash#index as the norm, but 1.9.2 uses Hash#key
 if RUBY_VERSION[0,3] == "1.9"
