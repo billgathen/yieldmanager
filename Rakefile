@@ -70,13 +70,22 @@ end
 namespace :yieldmanager do
   desc "Build wsdls for API version in API_VERSION file"
   task :build_wsdls do
-    require 'lib/yieldmanager/builder'
+    require './lib/yieldmanager/builder'
     Yieldmanager::Builder.build_wsdls_for(api_version)
   end
   
   desc "Delete wsdls for API version in API_VERSION file"
   task :delete_wsdls do
-    require 'lib/yieldmanager/builder'
+    require './lib/yieldmanager/builder'
     Yieldmanager::Builder.delete_wsdls_for(api_version)
   end
+end
+
+def api_version
+  version_file = "API_VERSION"
+  path = File.join(File.dirname(__FILE__), version_file)
+  unless File.exists?(path)
+    fail "Put the API version in a file called #{version_file}"
+  end
+  File.open(path){ |f| f.readline.chomp }
 end
