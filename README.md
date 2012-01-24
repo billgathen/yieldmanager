@@ -7,7 +7,7 @@ Currently it generates a fresh wsdl from the api.yieldmanager.com site the
 first time you use a service (in the future it will use locally-cached
 copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 
-This version implements API version 1.33.
+The current API version is stored in the API_VERSION file.
 
 ### Installation
 
@@ -195,4 +195,4 @@ and [Tomor Doron's blog post](http://tomerdoron.blogspot.com/2009/10/fixing-soap
 
 ## Copyright
 
-Copyright (c) 2009-2011 Bill Gathen. See LICENSE for details.
+Copyright (c) 2009-2012 Bill Gathen. See LICENSE for details.

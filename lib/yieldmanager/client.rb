@@ -111,13 +111,20 @@ module Yieldmanager
     end
   
     def available_services
-      Dir.entries(@wsdl_dir).map do |wsdl|
-        if wsdl.match(/wsdl/) 
-          wsdl.sub(/\.wsdl/,'')
-        else
-          nil
-        end
-      end.compact
+      available_services = []
+      available_services_file = "AVAILABLE_SERVICES"
+      path = File.join(File.dirname(__FILE__), '..', '..', available_services_file)
+      unless File.exists?(path)
+        fail "Put available services in a file called #{available_services_file}"
+      end
+      IO.readlines(path).each do |line|
+        available_services << camel_to_under(line.chomp.sub(/Service$/,''))
+      end
+      available_services
+    end
+    
+    def camel_to_under s
+      s.gsub(/(.)([A-Z])/,'\1_\2').downcase
     end
     
     # Manages Yieldmanager session
