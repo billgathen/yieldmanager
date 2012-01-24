@@ -9,7 +9,7 @@ EOM
 
 describe "api version" do
   it "pulls api version from file" do
-    Yieldmanager::Client.api_version.should == "1.33"
+    Yieldmanager::Client.api_version.should match /\d\.\d{2}/
   end
 end
 
