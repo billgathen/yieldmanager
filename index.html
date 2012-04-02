@@ -1,0 +1,276 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>Yieldmanager</title>
+  <meta name="description" content="Interact with RightMedia's YieldManager API and Reportware products">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">Yieldmanager</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">Interact with RightMedia's YieldManager API and Reportware products</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/billgathen/yieldmanager/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/billgathen/yieldmanager/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/billgathen/yieldmanager" class="code">fork Yieldmanager on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>yieldmanager</h1>
+
+<p>This gem offers read/write access to <a href="https://api.yieldmanager.com/doc/">YieldManager's API tools</a> and
+ad-hoc reporting through the Reportware tool.</p>
+
+<p>Currently it generates a fresh wsdl from the api.yieldmanager.com site the
+first time you use a service (in the future it will use locally-cached
+copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.</p>
+
+<p>The current API version is stored in the API_VERSION file.</p>
+
+<h3>Installation</h3>
+
+<p>Yieldmanager is available as a gem for easy installation.</p>
+
+<pre><code>sudo gem install yieldmanager
+</code></pre>
+
+<p>or if you're using <a href="https://rvm.beginrescueend.com/">RVM</a> (and why on earth wouldn't you?)</p>
+
+<pre><code>gem install yieldmanager
+</code></pre>
+
+<p>The project is available for review/forking on github.com</p>
+
+<pre><code>git clone git://github.com/billgathen/yieldmanager.git
+</code></pre>
+
+<p>To use in a Rails project, add this to config/environment.rb:</p>
+
+<pre><code>config.gem 'yieldmanager'
+</code></pre>
+
+<h3>Creating a Yieldmanager::Client</h3>
+
+<pre><code>require 'yieldmanager'
+
+@ym = Yieldmanager::Client.new(
+    :user =&gt; "bob",
+    :pass =&gt; "secret"
+)
+</code></pre>
+
+<p>The default environment is production.
+To access the test environment, use this:</p>
+
+<pre><code>@ym = Yieldmanager::Client.new(
+    :user =&gt; "bob",
+    :pass =&gt; "secret"
+    :env =&gt; "test"
+)
+</code></pre>
+
+<p>The keys can also be passed as strings: 'user', 'pass' and 'env'.</p>
+
+<p><strong>NOTE</strong> Changing the environment after creation has no effect!</p>
+
+<h3>What API version am I using?</h3>
+
+<p>To check (or log) the current API version, execute the following:</p>
+
+<pre><code>Yieldmanager::Client.api_version
+</code></pre>
+
+<h3>Finding available services</h3>
+
+<pre><code>@ym.available_services
+</code></pre>
+
+<h3>Using a service</h3>
+
+<pre><code>@ym.session do |token|
+    @currencies = @ym.dictionary.getCurrencies(token)
+end
+</code></pre>
+
+<p><strong>GOTCHA</strong> In projects with ActiveRecord enabled (i.e., Rails projects)
+SOAP will identify returned data as AR objects if there's a
+naming collision. For example, if you're running</p>
+
+<pre><code>@ym.creative.get(token,123)
+</code></pre>
+
+<p>and you have an AR objects for a <strong>creatives</strong> table in the db, the
+SOAP parser will interpret the returned SOAP object as
+an AR Creative object, resulting in bizarre errors. Uniquely
+re-name your AR object to eliminate the conflict.   </p>
+
+<h3>Pagination</h3>
+
+<p>Some calls return datasets too large to retrieve all at once.
+Pagination allows you to pull them back incrementally, handling
+the partial dataset on-the-fly or accumulating it for later use.</p>
+
+<pre><code>BLOCK_SIZE = 50
+id = 1
+@ym.session do |token|
+    @ym.paginate(BLOCK_SIZE) do |block|
+        (lines,tot) = @ym.line_item.getByBuyer(token,id,BLOCK_SIZE,block)
+        # ...do something with lines...
+        tot # remember to return total!
+    end
+end
+</code></pre>
+
+<h3>Pulling reports</h3>
+
+<p>Accessing reportware assumes you've used the "Get request XML"
+functionality in the UI to get your request XML, or have
+crafted one from scratch. Assuming it's in a variable called
+<strong>request_xml</strong>, you'd access the data this way:</p>
+
+<pre><code>@ym.session do |token|
+    report = @ym.pull_report(token, request_xml)
+    puts report.headers.join("\t")
+    report.data.each do |row|
+        puts row.join("\t")
+    end
+end
+</code></pre>
+
+<p>Column data can be accessed either by index or column name:</p>
+
+<pre><code>report.headers # =&gt; ['advertiser_name','seller_imps']
+report.data[0][0] # =&gt; "Bob's Ads"
+report.data[0].by_name('advertiser_name') # =&gt; "Bob's Ads"
+report.data[0].by_name(:advertiser_name) # =&gt; "Bob's Ads"
+</code></pre>
+
+<p>If you call <strong>by_name</strong> with a non-existent column, it will throw an
+<strong>ArgumentError</strong> telling you so.</p>
+
+<p>Or you can extract the report to an array of named hashes, removing
+dependencies on the gem for consumers of the data (say, across an API):</p>
+
+<pre><code>hashes = report.to_hashes
+hashes[0]['advertiser_name'] # =&gt; "Bob's Ads"
+</code></pre>
+
+<p><strong>NOTE</strong> Any totals columns your xml requests will be interpreted
+as ordinary data.</p>
+
+<h3>Mocking reports</h3>
+
+<p>When simulating report calls without actually hitting Yieldmanager, you can
+create your own reports.</p>
+
+<pre><code>rpt = Yieldmanager::Report.new
+rpt.headers = ["first","second"]
+rpt.add_row([1,2])
+rpt.data.first.by_name("first").should == 1
+rpt.data.first.by_name("second").should == 2
+</code></pre>
+
+<h3>Wiredumps (SOAP logging)</h3>
+
+<p>To see the nitty-gritty of what's going over the wire (Yahoo tech support often asks for this),
+you can activate a "wiredump" on a per-service basis. Typically you just echo it to standard out.
+For instance:</p>
+
+<pre><code>client.entity.wiredump_dev = $stdout # on
+adv = client.entity.get(token,12345)
+client.entity.wiredump_dev = nil # off
+</code></pre>
+
+<p>For Rails in a passenger environment, standard out doesn't end up in the logfiles.
+Instead, redirect to a file:</p>
+
+<pre><code>wiredump = File.new("#{Rails.root}/log/wiredump_entity_#{Time.new.strftime('%H%M%S')}.log",'w')
+client.entity.wiredump_dev = wiredump # on
+
+adv = client.entity.get(token,12345)
+
+wiredump.flush # make sure everything gets in there before it closes
+client.entity.wiredump_dev = nil # off
+</code></pre>
+
+<p>The last 2 lines belong in an ensure block, so the file is created even
+when there's an error (which is probably why you're doing this).</p>
+
+<h3>session vs. start_session/end_session</h3>
+
+<p>The <strong>session</strong> method opens a session, gives you a token to use in your service
+calls, then closes the session when the block ends, even if an exception is
+raised during processing. It's the recommended method to ensure you don't
+hang connections when things go wrong. If you use start/end, make sure you
+wrap your logic in a begin/ensure clause and call end_session from the ensure.</p>
+
+<h2>RE: Ruby 1.9</h2>
+
+<p>In an effort to be a good ruby citizen, KarateCode and I have made the gem
+1.9 compatible, but it is based on soap4r 1.5.8, which requires a pile of monkey-patches
+to get working and not <strong>every</strong> combination of calls and args have been tested
+in 1.9. If you're interested in what's been done, check out <strong>lib/soap4r_19_patch</strong>
+and <a href="http://tomerdoron.blogspot.com/2009/10/fixing-soap4r-for-ruby-19.html">Tomor Doron's blog post</a>.</p>
+
+<h2>Note on Patches/Pull Requests</h2>
+
+<ul>
+<li>Fork the project.</li>
+<li>Make your feature addition or bug fix.</li>
+<li>Add specs for it. This is important so I don't break it in a
+future version unintentionally.</li>
+<li>Commit, do not mess with rakefile, version, or history.
+(if you want to have your own version, that is fine but
+bump version in a commit by itself I can ignore when I pull)</li>
+<li>Send me a pull request. Bonus points for topic branches.</li>
+</ul><h2>Thanks for contributing!</h2>
+
+<ul>
+<li>manlycode<a href="Chris%20Rittersdorf">https://github.com/manlycode</a>
+</li>
+<li>KarateCode<a href="Michael%20Schneider">https://github.com/KarateCode</a>
+</li>
+</ul><h2>Copyright</h2>
+
+<p>Copyright (c) 2009-2012 Bill Gathen. See LICENSE for details.</p>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/billgathen" class="avatar"><img src="https://secure.gravatar.com/avatar/3acbfdf5894e66bc8a533d048d0eaf5c?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png" width="48" height="48"/></a> <a href="https://github.com/billgathen">billgathen</a> maintains <a href="https://github.com/billgathen/yieldmanager">Yieldmanager</a></p>
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/billgathen/yieldmanager/tarball/master" class="tar">tar</a><a href="https://github.com/billgathen/yieldmanager/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+  
+</body>
+</html>
