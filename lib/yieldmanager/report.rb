@@ -2,6 +2,8 @@
 # via KarateCode[https://github.com/KarateCode] (Michael Schneider)
 #
 require 'openssl'
+require 'fastercsv' unless RUBY_VERSION[0,3] == "1.9"
+
 module OpenSSL
   module SSL
     remove_const :VERIFY_PEER
@@ -26,14 +28,16 @@ module Yieldmanager
   # 
   # Column order is stored in the *headers* array.
   class Report
-    attr_accessor :headers, :data
+    attr_accessor :headers, :data, :report_response_format
     
     def initialize
       self.headers = []
       self.data = []
+      self.report_response_format = "xml"
     end
     
-    def pull token, report, xml
+    def pull token, report, xml, report_response_format
+      self.report_response_format = report_response_format
       report_token = request_report_token token, report, xml
       report_url = retrieve_report_url token, report, report_token
       retrieve_data report_url
@@ -42,12 +46,12 @@ module Yieldmanager
     def add_row row_data
       row = ReportRow.new(self)
       row_data.each { |ele| row << ele }
-      data << row
+      self.data << row
     end
 
     def to_hashes
       hashes = []
-      data.each do |row|
+      self.data.each do |row|
         row_hash = {}
         row.each_with_index do |ele,idx|
           row_hash[headers[idx]] = ele
@@ -65,26 +69,57 @@ private
 
     def retrieve_report_url token, report, report_token
       report_url = nil
-      60.times do |secs| # Poll until report ready
+      240.times do |secs| # Poll until report ready
         report_url = report.status(token,report_token)
         break if report_url != nil
         sleep(5)
       end
+      raise "ReportWare url is blank" if report_url.nil? || report_url.empty?
       report_url
     end
     
+    def open_report url
+      open(url)
+    end
+    
     def retrieve_data url
-      doc = open(url) { |f| Hpricot(f) }
-      (doc/"header column").each do |col|
-        headers << col.inner_html
+      second_pull_attempt = false
+      begin
+        rmx_report = open_report(url)
+      rescue OpenURI::HTTPError => the_error
+        raise the_error if second_pull_attempt
+        raise the_error unless the_error.message.include?("404")
+        
+        # sleep 10 seconds while we wait for reportware to place the report at the destination url
+        sleep(10)
+        second_pull_attempt = true
+        retry
       end
-      (doc/"row").each_with_index do |row_elems,idx|
+      
+      # for very large XML documents you can reduce file size by switching to CSV 
+      # which is about a 1/100 size reduction. Yup. Seriously.
+      if "csv" == report_response_format
+        parse_csv_report rmx_report
+      else        
+        parse_xml_report rmx_report
+      end
+    end
+    
+    def parse_csv_report rmx_report
+      data_set = FasterCSV.new(rmx_report).read
+      self.headers = data_set.shift
+      # the three junk lines at the end of the report
+      data_set[0,data_set.size - 3].each { |csv_row| add_row csv_row }
+    end
+      
+    def parse_xml_report rmx_report
+      doc = Hpricot(rmx_report)
+      (doc/"header column").each { |col| self.headers << col.inner_html }
+      (doc/"row").each do |row_elems|
         # TODO cast elements to appropriate types based on column attrs
         row = ReportRow.new(self)
-        (row_elems/"column").each do |col|
-          row << col.inner_html
-        end
-        data << row
+        (row_elems/"column").each { |col| row << col.inner_html }
+        self.data << row
       end
     end
     

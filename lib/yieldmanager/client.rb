@@ -80,6 +80,8 @@ module Yieldmanager
     attr_reader :api_version
     # Yieldmanager environment ("prod" or "test", defaults to "prod")
     attr_reader :env
+    
+    AVAILABLE_ENVS = ["test","prod"]
     BASE_URL = "https://api.yieldmanager.com/api-"
     BASE_URL_TEST = "https://api-test.yieldmanager.com/api-"
     WSDL_DIR = File.join(File.dirname(__FILE__), '..', '..', 'wsdls')
@@ -90,22 +92,16 @@ module Yieldmanager
     # * :user (required) - Yieldmanager user
     # * :pass (required) - Yieldmanager pass
     # * :env (optional) - Yieldmanager environment "prod" or "test" (defaults to prod)
-    def initialize(options = nil)
-      unless options &&
-        (options[:user] || options['user']) &&
-        (options[:pass] || options['pass'])
-        raise ArgumentError, ":user and :pass are required"
-      end
+    def initialize(options = {})
       @user = options[:user] ||= options['user']
       @pass = options[:pass] ||= options['pass']
+      raise ArgumentError, ":user and :pass are required" unless @user && @pass
+      
       @api_version = Yieldmanager::Client.api_version
-      if options[:env]
-        @env = options[:env]
-      elsif options['env']
-        @env = options['env']
-      else
-        @env = "prod"
-      end
+      
+      @env = (options[:env] || options['env'] || "prod")
+      raise ArgumentError, ":env must be 'test' or 'prod', was #{@env.inspect}" unless AVAILABLE_ENVS.include?(@env)
+      
       @wsdl_dir = "#{WSDL_DIR}/#{@api_version}/#{@env}"
       wrap_services
     end
@@ -171,9 +167,9 @@ module Yieldmanager
     # Pulls report from RightMedia, returned as Yieldmanager::Report
     #
     # Must be called within the context of a session
-    def pull_report token, xml
+    def pull_report token, xml, report_response_format = "xml"
       report = Yieldmanager::Report.new
-      report.pull(token, self.report, xml)
+      report.pull(token, self.report, xml, report_response_format)
       report
     end
 

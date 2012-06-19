@@ -46,6 +46,9 @@ describe "A new Yieldmanager client" do
     ym_test2 = Yieldmanager::Client.new(login_args.merge('env' => "test"))
     ym_test2.env.should == "test"
     ym_test2.contact.inspect.should match("api-test.yieldmanager.com")
+    lambda {
+      Yieldmanager::Client.new(login_args.merge('env' => "testee"))
+    }.should raise_error(ArgumentError)
   end
   
   it "displays available services" do
