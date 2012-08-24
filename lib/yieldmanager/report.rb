@@ -57,6 +57,10 @@ module Yieldmanager
       hashes
     end
 
+    def pause
+      sleep(5)
+    end
+
 private
     
     def request_report_token token, report, xml
@@ -68,13 +72,24 @@ private
       60.times do |secs| # Poll until report ready
         report_url = report.status(token,report_token)
         break if report_url != nil
-        sleep(5)
+        pause
       end
       report_url
     end
     
     def retrieve_data url
-      doc = open(url) { |f| Hpricot(f) }
+      retries = 5
+      doc = nil
+      while (doc == nil && retries > 0) do
+        begin
+          doc = parse_data(url)
+        rescue Exception => e
+          retries = retries - 1
+          pause
+        end
+      end
+      raise "Failed pulling report data from #{url}" unless doc
+
       (doc/"header column").each do |col|
         headers << col.inner_html
       end
@@ -86,6 +101,10 @@ private
         end
         data << row
       end
+    end
+
+    def parse_data url
+      open(url) { |f| Hpricot(f) }
     end
     
     class ReportRow < Array

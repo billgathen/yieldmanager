@@ -98,11 +98,12 @@ describe "A Yieldmanager report request" do
     report.headers[0] = 'new_first'
     report.data.first.by_name('new_first').should == "one"
   end
-  
-  it "complains if report token is nil"
-  
-  # need configurable pause and attempts to keep this from running 5 mins!
-  it "throws ReportTimeoutException if report data never returns"
+
+  it "complains if report URL doesn't exist, even after retries" do
+    report = Yieldmanager::Report.new
+    report.stub(:pause) {} # don't make me wait
+    expect{ report.send(:retrieve_data,"http://i_dont_exist.com") }.to raise_error
+  end
   
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
