@@ -1,7 +1,7 @@
 require 'rubygems' unless RUBY_VERSION.start_with?("1.9")
 require 'soap/wsdlDriver'
 require 'open-uri'
-require 'hpricot'
+require 'nokogiri'
 
 # 1.8.7 uses Hash#index as the norm, but 1.9.2 uses Hash#key
 if RUBY_VERSION[0,3] == "1.9"
@@ -13,9 +13,9 @@ if RUBY_VERSION[0,3] == "1.9"
         if nsdef && namedef
           type_qname = XSD::QName.new(nsdef, namedef)
         elsif mapped_class
-          # Ruby 1.8.7 way: 
+          # Ruby 1.8.7 way:
           # type_qname = TypeMap.index(mapped_class)
-          # Ruby 1.9.2 way: 
+          # Ruby 1.9.2 way:
           type_qname = TypeMap.key(mapped_class)
         end
         case io_type
@@ -39,7 +39,7 @@ if RUBY_VERSION[0,3] == "1.9"
         end
       end
     end
-    
+
   end
 end
 
@@ -83,7 +83,7 @@ module Yieldmanager
     BASE_URL = "https://api.yieldmanager.com/api-"
     BASE_URL_TEST = "https://api-test.yieldmanager.com/api-"
     WSDL_DIR = File.join(File.dirname(__FILE__), '..', '..', 'wsdls')
-  
+
     # Creates interface object.
     #
     # Options:
@@ -109,7 +109,7 @@ module Yieldmanager
       @wsdl_dir = "#{WSDL_DIR}/#{@api_version}/#{@env}"
       wrap_services
     end
-  
+
     def available_services
       available_services = []
       available_services_file = "AVAILABLE_SERVICES"
@@ -122,11 +122,11 @@ module Yieldmanager
       end
       available_services
     end
-    
+
     def camel_to_under s
       s.gsub(/(.)([A-Z])/,'\1_\2').downcase
     end
-    
+
     # Manages Yieldmanager session
     #
     # Returns block with token string to be used in API/report calls
@@ -140,21 +140,21 @@ module Yieldmanager
         end_session token
       end
     end
-    
+
     # Opens Yieldmanager session
     #
     # Use #session if possible: it guarantees no hanging sessions
     def start_session
       contact.login(@user,@pass,{'errors_level' => 'throw_errors','multiple_sessions' => '1'})
     end
-    
+
     # Closes Yieldmanager session
     #
     # Use #session if possible: it guarantees no hanging sessions
     def end_session token
       contact.logout(token)
     end
-    
+
     # Allows looping over datasets too large to pull back in one call
     #
     # Block must return total rows in dataset to know when to stop!
@@ -167,7 +167,7 @@ module Yieldmanager
         page += 1
       end until (block_size * (page-1)) > total
     end
-    
+
     # Pulls report from RightMedia, returned as Yieldmanager::Report
     #
     # Must be called within the context of a session
@@ -187,7 +187,7 @@ module Yieldmanager
     end
 
 private
-    
+
     def wrap_services
       available_services.each do |s|
         self.class.send(:attr_writer, s.to_sym)
@@ -200,7 +200,7 @@ private
         }
       end
     end
-    
+
     def load_service name
       # FIXME Local wsdl hit throws "unknown element: {http://schemas.xmlsoap.org/wsdl/}definitions"
       # wsdl_path = "file://#{@wsdl_dir}/#{name}.wsdl"

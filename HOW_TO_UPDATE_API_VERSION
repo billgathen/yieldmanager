@@ -4,7 +4,8 @@ When RightMedia updates their release (say, from 1.33 to 1.34), do this:
 - Edit the API_VERSION file to match the new release
 - Visit the main API doc page (https://api.yieldmanager.com/doc/) and make sure the AVAILABLE_SERVICES file exactly matches the services listed in the sidebar.
 - Run all the specs using 'rake' to ensure nothing broke
-- Bump the version 'rake version:bump:patch' unless you've made other awesome changes, in which case use 'rake version:bump:minor'
-- 'rake release' to cut a version, push to github and push to rubygems.org
+- Bump the VERSION in lib/yieldmanager/version.rb appropriately
+- 'rake release' to cut a version and push to rubygems.org
+- git push to store on github
 
 And you're done!
