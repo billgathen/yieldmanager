@@ -1,4 +1,5 @@
 AdjustmentService
+AdvertiserDomainService
 CampaignService
 ContactService
 CreativeService
@@ -11,8 +12,10 @@ NotificationService
 PixelService
 QuotaService
 ReportService
+RtbdService
 SearchService
 SectionService
 SegmentDefinitionService
+SegmentService
 SiteService
 TargetProfileService
