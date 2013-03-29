@@ -1,7 +1,7 @@
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
-if RUBY_VERSION.start_with?("1.9")
+if RUBY_VERSION >= "1.9.0"
   require "rspec/core/rake_task" # RSpec 2.0
 
   RSpec::Core::RakeTask.new(:spec) do |spec|

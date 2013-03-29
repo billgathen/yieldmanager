@@ -11,7 +11,7 @@ end
 require 'patch_detector'
 include PatchDetector
 
-if (RUBY_VERSION.start_with?("1.9"))
+if (RUBY_VERSION >= "1.9.0")
   #
   # This patch based on Tomer Doron's "Fixing soap4r for ruby 1.9" post
   # http://tomerdoron.blogspot.com/2009/10/fixing-soap4r-for-ruby-19.html
