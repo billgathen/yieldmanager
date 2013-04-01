@@ -52,7 +52,7 @@ To access the test environment, use this:
 ```ruby
 @ym = Yieldmanager::Client.new(
 	:user => "bob",
-	:pass => "secret"
+	:pass => "secret",
 	:env => "test"
 )
 ```
