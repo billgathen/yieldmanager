@@ -9,6 +9,8 @@ copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 
 The current API version is stored in the API_VERSION file.
 
+The gem should run properly on 1.8, 1.9 and 2.0, but 1.8 support will likely be removed in a future version.
+
 ### Installation
 
 Yieldmanager is available as a gem for easy installation.
@@ -203,14 +205,6 @@ calls, then closes the session when the block ends, even if an exception is
 raised during processing. It's the recommended method to ensure you don't
 hang connections when things go wrong. If you use start/end, make sure you
 wrap your logic in a begin/ensure clause and call end_session from the ensure.
-
-## RE: Ruby 1.9
-
-In an effort to be a good ruby citizen, KarateCode and I have made the gem
-1.9 compatible, but it is based on soap4r 1.5.8, which requires a pile of monkey-patches
-to get working and not **every** combination of calls and args have been tested
-in 1.9. If you're interested in what's been done, check out **lib/soap4r_19_patch**
-and [Tomor Doron's blog post](http://tomerdoron.blogspot.com/2009/10/fixing-soap4r-for-ruby-19.html).
 
 ## Note on Patches/Pull Requests
 
