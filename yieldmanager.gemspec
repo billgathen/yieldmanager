@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/billgathen/yieldmanager"
   s.summary     = %q{YieldManager API Tool}
   s.description = %q{This gem offers full access to YieldManager's API tools (read/write) as well as ad-hoc reporting through the Reportware tool}
+  s.license     = "MIT"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
