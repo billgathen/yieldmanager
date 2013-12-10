@@ -134,6 +134,15 @@ crafted one from scratch. Assuming it's in a variable called
 end
 ```
 
+For large reports it may be necessary to increase the request
+timeout, which has a default value of 300 seconds. You may do
+so by passing in an additional argument to **pull_report**:
+
+```ruby
+max_wait_seconds = 600
+@ym.pull_report(token, request_xml, max_wait_seconds)
+```
+
 Column data can be accessed either by index or column name:
 
 ```ruby

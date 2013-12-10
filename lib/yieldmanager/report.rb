@@ -33,9 +33,9 @@ module Yieldmanager
       @data = []
     end
 
-    def pull token, report, xml
+    def pull token, report, xml, max_wait_seconds
       report_token = request_report_token token, report, xml
-      report_url = retrieve_report_url token, report, report_token
+      report_url = retrieve_report_url token, report, report_token, max_wait_seconds
       retrieve_data report_url
     end
 
@@ -67,14 +67,22 @@ private
       report.requestViaXML(token,xml)
     end
 
-    def retrieve_report_url token, report, report_token
+    def retrieve_report_url token, report, report_token, max_wait_seconds
       report_url = nil
-      60.times do |secs| # Poll until report ready
+      start_time = Time.now
+
+      until over_max_time(start_time,max_wait_seconds)
         report_url = report.status(token,report_token)
         break if report_url
         pause
       end
+
+      raise "Report timed out. Consider using the optional max_wait_seconds argument in the pull method." unless report_url
       report_url
+    end
+
+    def over_max_time start_time, max_wait_seconds
+      Time.now.to_i - start_time.to_i > max_wait_seconds.to_i
     end
 
     def retrieve_data url
