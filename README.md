@@ -227,8 +227,10 @@ wrap your logic in a begin/ensure clause and call end_session from the ensure.
 * Send me a pull request. Bonus points for topic branches.
 
 ## Thanks for contributing!
-* manlycode[https://github.com/manlycode] (Chris Rittersdorf)
-* KarateCode[https://github.com/KarateCode] (Michael Schneider)
+* (manlycode)[https://github.com/manlycode]
+* (KarateCode)[https://github.com/KarateCode]
+* (budnik)[https://github.com/budnik] 
+* (walsh1kt)(http://github.com/walsh1kt]
 
 ## Copyright
 

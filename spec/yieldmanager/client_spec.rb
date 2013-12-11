@@ -133,8 +133,11 @@ describe "A new Yieldmanager client" do
       :imp_budget => 0,
       :priority => "Normal"
     }
-    lambda { @ym.session { |t| @ym.line_item.add(t,l) } }.
-      should_not raise_error(/enum_ym_numbers_difference: cannot accept ''/)
+    begin
+      @ym.session { |t| @ym.line_item.add(t,l) }
+    rescue Exception => e
+      expect(e.message).not_to match(/enum_ym_numbers_difference: cannot accept ''/)
+    end
   end
   
   describe "A Yieldmanager report" do
