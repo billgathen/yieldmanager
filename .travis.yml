@@ -1,5 +1,9 @@
 language: ruby
 rvm:
-  - 1.9.3
-  - 2.0
-  - jruby-19mode
+- 1.9.3
+- 2.0
+- jruby-19mode
+env:
+  matrix:
+  - secure: REB826VCv9n4/AyBjR0x88KNGh3goSTPaIP+CzRQS1rscdW8NLAycn1LXCjEVDSPkCl3Gd1aUlF2Mgq6BPe9Qu5ApSSQ5MFH/A8jI2CoBQrfw1Zwwql+hTHl0Q0vxjFC26+8v9/vxWuSRA725It5X+ZGLg9YJztVYbLaCo0ZWa0=
+  - secure: BMVSzV+AvG0Rg/0QWuRyeP/uc8+M3742VHksnr9QP5IKfrYSe2M2LttO+SFmBljHmsJDvdBdMYwHLTrkbcHZZZhfLVzSOdB0XSGjgPX6LQYR5fUvMmO4ArbSt3cGes932x94F+Nu6kTThnNnCKza561iWxXy3+AspjxYdr5V6q4=
