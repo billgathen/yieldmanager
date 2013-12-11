@@ -171,9 +171,9 @@ module Yieldmanager
     # Pulls report from RightMedia, returned as Yieldmanager::Report
     #
     # Must be called within the context of a session
-    def pull_report token, xml
+    def pull_report token, xml, max_wait_seconds=300
       report = Yieldmanager::Report.new
-      report.pull(token, self.report, xml)
+      report.pull(token, self.report, xml, max_wait_seconds)
       report
     end
 

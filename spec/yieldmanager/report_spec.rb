@@ -7,61 +7,61 @@ Please set these environment variables to match your Yieldmanager account:
 * YIELDMANAGER_CONTACT_ID (get this from the contact_id attribute in any UI-created reportware report)
 * YIELDMANAGER_IP_ADDRESS (your external IP address)
 EOM
-  
+
 describe "A Yieldmanager report request" do
 
   before(:each) do
     @ym = Yieldmanager::Client.new(login_args)
     @sample_report = File.join(File.dirname(__FILE__), '..', 'reports', 'sample_report.xml')
   end
-  
+
   it "returns report object" do
     @ym.session do |token|
       rpt = @ym.pull_report(token, request_xml)
       rpt.should be_instance_of(Yieldmanager::Report)
     end
   end
-  
+
   it "makes request and returns report token" do
     @ym.session do |token|
       rpt = Yieldmanager::Report.new
       rpt.send(:request_report_token, token, @ym.report, request_xml).should_not be_nil
     end
   end
-  
+
   it "uses report token to pull report url" do
     @ym.session do |token|
       rpt = Yieldmanager::Report.new
       report_token = rpt.send(:request_report_token, token, @ym.report, request_xml)
-      report_url = rpt.send(:retrieve_report_url, token, @ym.report, report_token)
+      report_url = rpt.send(:retrieve_report_url, token, @ym.report, report_token, 300)
       report_url.should_not be_nil
     end
   end
-  
+
   it "uses report url to pull report" do
     @ym.session do |token|
       rpt = Yieldmanager::Report.new
       report_token = rpt.send(:request_report_token, token, @ym.report, request_xml)
-      report_url = rpt.send(:retrieve_report_url, token, @ym.report, report_token)
+      report_url = rpt.send(:retrieve_report_url, token, @ym.report, report_token, 300)
 
       rpt.send(:retrieve_data, report_url)
       rpt.headers[0].should == "advertiser_name"
     end
   end
-  
+
   it "offers data as array of arrays" do
     report = Yieldmanager::Report.new
     report.send(:retrieve_data, @sample_report)
     report.data[0][0].should == "one"
   end
-  
+
   it "offers data by name" do
     report = Yieldmanager::Report.new
     report.send(:retrieve_data, @sample_report)
     report.data[0].by_name('first').should == "one"
     report.data[1].by_name(:second).should == "2"
   end
-  
+
   it "offers data as array of hashes" do
     report = Yieldmanager::Report.new
     report.send(:retrieve_data, @sample_report)
@@ -104,7 +104,31 @@ describe "A Yieldmanager report request" do
     report.stub(:pause) {} # don't make me wait
     expect{ report.send(:retrieve_data,"http://i_dont_exist.com") }.to raise_error
   end
-  
+
+  it "complains if report URL doesn't exist before retries" do
+    @ym.session do |token|
+      report = Yieldmanager::Report.new
+      Yieldmanager::Report.any_instance.stub(:status)
+      report.should_receive(:over_max_time).and_return(true)
+      report.stub(:pause) {} # don't make me wait
+      expect{ report.send(:retrieve_report_url, token, @ym.report, request_xml, 1) }.to raise_error(/Report timed out after 1 second./)
+    end
+  end
+
+  it "responds correctly when not over max time" do
+    start_time = Time.now-5
+    max_wait_seconds = 5
+    report = Yieldmanager::Report.new
+    report.send(:over_max_time, start_time, max_wait_seconds).should == false
+  end
+
+  it "responds correctly when over max time" do
+    start_time = Time.now-6
+    max_wait_seconds = 5
+    report = Yieldmanager::Report.new
+    report.send(:over_max_time, start_time, max_wait_seconds).should == true
+  end
+
   def login_args
     unless ENV["YIELDMANAGER_USER"] &&
       ENV["YIELDMANAGER_PASS"]
