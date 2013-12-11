@@ -1,5 +1,7 @@
 # yieldmanager
 
+[![Build Status](https://travis-ci.org/billgathen/yieldmanager.png)](https://travis-ci.org/billgathen/yieldmanager)
+
 This gem offers read/write access to [YieldManager's API tools](https://api.yieldmanager.com/doc/) and
 ad-hoc reporting through the Reportware tool.
 
@@ -227,10 +229,10 @@ wrap your logic in a begin/ensure clause and call end_session from the ensure.
 * Send me a pull request. Bonus points for topic branches.
 
 ## Thanks for contributing!
-* (manlycode)[https://github.com/manlycode]
-* (KarateCode)[https://github.com/KarateCode]
-* (budnik)[https://github.com/budnik] 
-* (walsh1kt)(http://github.com/walsh1kt]
+* [manlycode](https://github.com/manlycode)
+* [KarateCode](https://github.com/KarateCode)
+* [budnik](https://github.com/budnik) 
+* [walsh1kt](http://github.com/walsh1kt)
 
 ## Copyright
 

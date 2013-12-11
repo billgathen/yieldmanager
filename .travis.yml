@@ -4,5 +4,8 @@ rvm:
 - 2.0
 - jruby-19mode
 env:
-  matrix:
-  - secure: jGRyQRfXC6PL46v0+ITLBVVMP8TguBCUz16CvyDrqWPpe5x7Fey5x2ETbpzMhkOjwpUWVMQ+Kcx/w/bfUyB83SZbepWcrmsqhiJg/WfT/yZ9Bpzk4EA9AUCCCSJrKg0a1vNsXVLJ2wkh0MN8IhrPFk+cIpB5uMjE8SMEazW+gFI=
+  global:
+  - secure: AO8pJu1f0xY/Evuf2G+l3v9ozwaaiNP1wiX8gbSRE2DoEuyghTlUBwQHCOUg0M6bq8gTvD8O7HeE9egUQ24c9Z1lA8Yr08A+WKwmf9i30iXdTffdonATyJ6fp6m6zpSQf0N+/ApXDKABpKJ671yLhRnaSho1/EdIauMvDze3gkg=
+  - secure: ZFxeI+npRXNbhQNIWNu1/MOl6fbNt84kD7AJF62E/LfjEVQZKohm6Zfm2pUrfAF7UWGnpb/ZYDusj3EnzazyUvfkd8Gj40XWXwjv0jvfnV3p8yUkAIbHKlEQqKWnbppMM7i0z+uAyJW1VFU/H50ZiuaPXTdB4LzJXH2crJQXnaQ=
+  - secure: A8iYjMBh3OPznTKD/rPztz3tWGBrdJzmlakf3JrTLLWfHHxCE+lHip/Z/EVvTb3ec37owNjh0W8Z8yTPkz54FM++tM/t/W/eR8c71y2V4SI6ln+0wv5Uh5WNqVYpCsAn1DiZ3W4j1LpMGKbnw5ShyV89wfefC2JV55jQorQbth8=
+  - secure: TE+/zUZh6brUT4q/oIKqgQH8P4mMPdeav+gUiRvkh5mtwX0HCPMW1Eq7+AoaxsTvksQfUbQLaObGGuQ3xn6ZkiE98lG6y1rk/3Q7keZLQ7zHDP2ucxAtRS/YBTKlcY5yVaj3oRoG4J0XGvN18YNXKB7jRb95HsIRIpSVmvbDjKA=
