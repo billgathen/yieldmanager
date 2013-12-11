@@ -4,6 +4,7 @@ When RightMedia updates their release (say, from 1.33 to 1.34), do this:
 - Edit the API_VERSION file to match the new release
 - Visit the main API doc page (https://api.yieldmanager.com/doc/) and make sure the AVAILABLE_SERVICES file exactly matches the services listed in the sidebar.
 - Run all the specs using 'rake' to ensure nothing broke
+- Commit/push changes and confirm Travis builds on all rubies we support
 - Bump the VERSION in lib/yieldmanager/version.rb appropriately
 - 'rake release' to cut a version and push to rubygems.org
 

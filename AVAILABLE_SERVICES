@@ -1,8 +1,10 @@
 AdjustmentService
 AdvertiserDomainService
+BuyingTermsService
 CampaignService
 ContactService
 CreativeService
+DemandBlockListService
 DictionaryService
 EntityService
 InsertionOrderService
@@ -10,7 +12,9 @@ InventoryVisibilityControlsService
 LineItemService
 LinkingService
 NotificationService
+PassbackService
 PixelService
+PreferredTermsService
 PublisherReservePriceService
 QuotaService
 ReportService
@@ -19,5 +23,7 @@ SearchService
 SectionService
 SegmentDefinitionService
 SegmentService
+SitelistService
 SiteService
+SupplyBlocklistService
 TargetProfileService
