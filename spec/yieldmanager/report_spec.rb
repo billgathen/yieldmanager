@@ -111,7 +111,7 @@ describe "A Yieldmanager report request" do
       Yieldmanager::Report.any_instance.stub(:status)
       report.should_receive(:over_max_time).and_return(true)
       report.stub(:pause) {} # don't make me wait
-      expect{ report.send(:retrieve_report_url, token, @ym.report, request_xml, 1) }.to raise_error(/Report timed out./)
+      expect{ report.send(:retrieve_report_url, token, @ym.report, request_xml, 1) }.to raise_error(/Report timed out after 1 second./)
     end
   end
 

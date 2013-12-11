@@ -77,7 +77,7 @@ private
         pause
       end
 
-      raise "Report timed out. Consider using the optional max_wait_seconds argument in the pull method." unless report_url
+      raise "Report timed out after #{max_wait_seconds} seconds. Consider using the optional max_wait_seconds argument in the pull method." unless report_url
       report_url
     end
 
