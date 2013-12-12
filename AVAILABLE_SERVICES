@@ -4,7 +4,7 @@ BuyingTermsService
 CampaignService
 ContactService
 CreativeService
-DemandBlockListService
+DemandBlocklistService
 DictionaryService
 EntityService
 InsertionOrderService
