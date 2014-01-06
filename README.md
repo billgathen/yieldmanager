@@ -21,7 +21,7 @@ Yieldmanager is available as a gem for easy installation.
 sudo gem install yieldmanager
 ```
 
-or if you're using [RVM](https://rvm.beginrescueend.com/) (and why on earth wouldn't you?)
+or if you're using [RVM](https://rvm.io/) (and why on earth wouldn't you?)
 
 ```
 gem install yieldmanager
