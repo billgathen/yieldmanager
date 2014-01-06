@@ -139,6 +139,26 @@ describe "A new Yieldmanager client" do
       expect(e.message).not_to match(/enum_ym_numbers_difference: cannot accept ''/)
     end
   end
+
+  it "skips check_restriction when necessary" do
+    @ym.session do |t|
+      expect{ get_pub_tags(t) }.to raise_error(/enum_ad_tag_type: cannot accept ''/)
+
+      begin
+        @ym.disable_check_restriction
+        get_pub_tags(t)
+      ensure
+        @ym.enable_check_restriction
+      end
+
+      expect{ get_pub_tags(t) }.to raise_error(/enum_ad_tag_type: cannot accept ''/)
+    end
+  end
+
+  def get_pub_tags t
+    id = ENV["YIELDMANAGER_PUBLISHER_SECTION_ID"].to_i
+    @ym.entity.getPubAdTags(t, [id], { banners_size_ids: [2,6,10] })
+  end
   
   describe "A Yieldmanager report" do
 

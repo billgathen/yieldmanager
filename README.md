@@ -100,6 +100,28 @@ SOAP parser will interpret the returned SOAP object as
 an AR Creative object, resulting in bizarre errors. Uniquely
 re-name your AR object to eliminate the conflict.
 
+### WSDL validation checks
+
+**NOTE** this feature is not thread-safe!
+
+Due to an unknown bug, soap4r occasionally reports that a field is required when it really isn't. If you get an error along the lines of
+
+```
+XSD::ValueSpaceError: {https://api.yieldmanager.com/types}enum_ad_tag_type: cannot accept ''
+```
+
+...you can disable this checking temporarily by calling
+
+```
+@ym.disable_check_restriction
+```
+
+When you're done with the call, re-enable it using
+
+```
+@ym.enable_check_restriction
+```
+
 ### Pagination
 
 Some calls return datasets too large to retrieve all at once.

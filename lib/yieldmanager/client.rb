@@ -45,9 +45,11 @@ end
 
 
 # Monkey-patch to eliminate bogus "cannot be null" errors from YM wsdl
+# "SKIP" is controlled via (enable|disable)_check_restriction methods
 class WSDL::XMLSchema::SimpleType
   private
   def check_restriction(value)
+    return value if ENV["YIELDMANAGER_CHECK_RESTRICTION"] == "SKIP"
     unless @restriction.valid?(value) || @name.to_s =~ /(enum_creative_third_party_types|enum_ym_numbers_difference)/
       raise XSD::ValueSpaceError.new("#{@name}: cannot accept '#{value}'")
     end
@@ -175,6 +177,19 @@ module Yieldmanager
       report = Yieldmanager::Report.new
       report.pull(token, self.report, xml, max_wait_seconds)
       report
+    end
+
+    # Disable WSDL restriction checking until re-enabled
+    # Some services complain incorrectly about nillable fields requiring values
+    # Disabling this checking allows them to pass properly
+    def disable_check_restriction
+      ENV["YIELDMANAGER_CHECK_RESTRICTION"] = "SKIP"
+    end
+
+    # Enable WSDL restriction checking (it's on by default)
+    # This is only needed when you've explicitly disabled the behavior previously
+    def enable_check_restriction
+      ENV["YIELDMANAGER_CHECK_RESTRICTION"] = nil
     end
 
     def self.api_version
