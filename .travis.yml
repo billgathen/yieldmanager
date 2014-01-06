@@ -2,6 +2,7 @@ language: ruby
 rvm:
 - 1.9.3
 - 2.0
+- 2.1
 - jruby-19mode
 env:
   global:
@@ -9,3 +10,4 @@ env:
   - secure: ZFxeI+npRXNbhQNIWNu1/MOl6fbNt84kD7AJF62E/LfjEVQZKohm6Zfm2pUrfAF7UWGnpb/ZYDusj3EnzazyUvfkd8Gj40XWXwjv0jvfnV3p8yUkAIbHKlEQqKWnbppMM7i0z+uAyJW1VFU/H50ZiuaPXTdB4LzJXH2crJQXnaQ=
   - secure: A8iYjMBh3OPznTKD/rPztz3tWGBrdJzmlakf3JrTLLWfHHxCE+lHip/Z/EVvTb3ec37owNjh0W8Z8yTPkz54FM++tM/t/W/eR8c71y2V4SI6ln+0wv5Uh5WNqVYpCsAn1DiZ3W4j1LpMGKbnw5ShyV89wfefC2JV55jQorQbth8=
   - secure: TE+/zUZh6brUT4q/oIKqgQH8P4mMPdeav+gUiRvkh5mtwX0HCPMW1Eq7+AoaxsTvksQfUbQLaObGGuQ3xn6ZkiE98lG6y1rk/3Q7keZLQ7zHDP2ucxAtRS/YBTKlcY5yVaj3oRoG4J0XGvN18YNXKB7jRb95HsIRIpSVmvbDjKA=
+  - secure: T0AM8anAGrZom/gGoOQPwsDkpP0yQWw5MMs0+GCHJTut0GURMJdbPy7S7UA8YE6PwRhvKRA7Jp//QUnWWq21152u+b25RwvOIXXeGqfDGHgp9Y8n0MMB8yL6GM3+c7gKTbAf544mkzjTWEQZOrTmeqtN91LstVz5W5RjqN5xkRU=
