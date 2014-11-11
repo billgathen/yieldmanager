@@ -8,8 +8,14 @@ begin
   end
 rescue LoadError
   require 'rspec'
-  require 'rspec/autorun'
   RSpec.configure do |config|
+    # TODO Remove this and convert to expect syntax!
+    config.mock_with :rspec do |c|
+      c.syntax = [:should, :expect]
+    end
+    config.expect_with :rspec do |c|
+      c.syntax = [:should, :expect]
+    end
   end
 end
 require 'patch_detector'

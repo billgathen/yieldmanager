@@ -258,4 +258,4 @@ wrap your logic in a begin/ensure clause and call end_session from the ensure.
 
 ## Copyright
 
-Copyright (c) 2009-2012 Bill Gathen. See LICENSE for details.
+Copyright (c) 2009-2014 Bill Gathen. See LICENSE for details.
