@@ -4,44 +4,44 @@ require 'open-uri'
 require 'nokogiri'
 
 # 1.8.7 uses Hash#index as the norm, but 1.9.2+ uses Hash#key
-#if RUBY_VERSION >= "1.9.0"
-#  class SOAP::RPC::SOAPMethod
-#    private
-#    def init_param(param_def)
-#      param_def.each do |io_type, name, param_type|
-#        mapped_class, nsdef, namedef = SOAP::RPC::SOAPMethod.parse_param_type(param_type)
-#        if nsdef && namedef
-#          type_qname = XSD::QName.new(nsdef, namedef)
-#        elsif mapped_class
-#          # Ruby 1.8.7 way:
-#          # type_qname = TypeMap.index(mapped_class)
-#          # Ruby 1.9.2 way:
-#          type_qname = TypeMap.key(mapped_class)
-#        end
-#        case io_type
-#        when IN
-#          @signature.push([IN, name, type_qname])
-#          @inparam_names.push(name)
-#        when OUT
-#          @signature.push([OUT, name, type_qname])
-#          @outparam_names.push(name)
-#        when INOUT
-#          @signature.push([INOUT, name, type_qname])
-#          @inoutparam_names.push(name)
-#        when RETVAL
-#          if @retval_name
-#            raise MethodDefinitionError.new('duplicated retval')
-#          end
-#          @retval_name = name
-#          @retval_class_name = mapped_class
-#        else
-#          raise MethodDefinitionError.new("unknown type: #{io_type}")
-#        end
-#      end
-#    end
-#
-#  end
-#end
+if RUBY_VERSION >= "1.9.0" && SOAP::RPC::MethodDef::Parameter.method_defined?(:each)
+class SOAP::RPC::SOAPMethod
+   private
+   def init_param(param_def)
+     param_def.each do |io_type, name, param_type|
+       mapped_class, nsdef, namedef = SOAP::RPC::SOAPMethod.parse_param_type(param_type)
+       if nsdef && namedef
+         type_qname = XSD::QName.new(nsdef, namedef)
+       elsif mapped_class
+         # Ruby 1.8.7 way:
+         # type_qname = TypeMap.index(mapped_class)
+         # Ruby 1.9.2 way:
+         type_qname = TypeMap.key(mapped_class)
+       end
+       case io_type
+       when IN
+         @signature.push([IN, name, type_qname])
+         @inparam_names.push(name)
+       when OUT
+         @signature.push([OUT, name, type_qname])
+         @outparam_names.push(name)
+       when INOUT
+         @signature.push([INOUT, name, type_qname])
+         @inoutparam_names.push(name)
+       when RETVAL
+         if @retval_name
+           raise MethodDefinitionError.new('duplicated retval')
+         end
+         @retval_name = name
+         @retval_class_name = mapped_class
+       else
+         raise MethodDefinitionError.new("unknown type: #{io_type}")
+       end
+     end
+   end
+
+end
+end
 
 
 # Monkey-patch to eliminate bogus "cannot be null" errors from YM wsdl
