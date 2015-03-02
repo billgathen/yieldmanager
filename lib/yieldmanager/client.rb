@@ -4,7 +4,7 @@ require 'open-uri'
 require 'nokogiri'
 
 # 1.8.7 uses Hash#index as the norm, but 1.9.2+ uses Hash#key
-if RUBY_VERSION >= "1.9.0" && SOAP::RPC::MethodDef::Parameter.method_defined?(:each)
+if RUBY_VERSION >= "1.9.0" && !SOAP::RPC.const_defined?(:MethodDef)
   class SOAP::RPC::SOAPMethod
     private
     def init_param(param_def)
