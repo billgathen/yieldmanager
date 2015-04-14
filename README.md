@@ -11,7 +11,7 @@ copies) and re-uses that wsdl for the life of the Yieldmanager::Client object.
 
 The current API version is stored in the API_VERSION file.
 
-The gem should run properly on 1.8, 1.9, 2.0 and JRuby 1.7.4, but 1.8 support will likely be removed in a future version.
+The gem should run properly on 1.8, 1.9, 2.x and JRuby, but 1.8 support will likely be removed in a future version.
 
 ### Installation
 
@@ -255,7 +255,8 @@ wrap your logic in a begin/ensure clause and call end_session from the ensure.
 * [KarateCode](https://github.com/KarateCode)
 * [budnik](https://github.com/budnik) 
 * [walsh1kt](http://github.com/walsh1kt)
+* [Hachmaninow](https://github.com/Hachmaninow)
 
 ## Copyright
 
-Copyright (c) 2009-2014 Bill Gathen. See LICENSE for details.
+Copyright (c) 2009-2015 Bill Gathen. See LICENSE for details.
