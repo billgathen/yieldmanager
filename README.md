@@ -253,10 +253,10 @@ wrap your logic in a begin/ensure clause and call end_session from the ensure.
 ## Thanks for contributing!
 * [manlycode](https://github.com/manlycode)
 * [KarateCode](https://github.com/KarateCode)
-* [budnik](https://github.com/budnik) 
+* [budnik](https://github.com/budnik)
 * [walsh1kt](http://github.com/walsh1kt)
 * [Hachmaninow](https://github.com/Hachmaninow)
 
 ## Copyright
 
-Copyright (c) 2009-2015 Bill Gathen. See LICENSE for details.
+Copyright (c) 2009-2015 Bill Gathen. See [LICENSE](https://github.com/billgathen/yieldmanager/blob/master/LICENSE) for details.
